@@ -1,0 +1,77 @@
+# Loan Amortization Calculator Specifications
+
+## 1. Given Data & Variables
+
+The calculator must use the following base variables and default values to perform calculations:
+
+| Variable | Description | Default Value |
+| :--- | :--- | :--- |
+| **$P$** | **Loan Amount (Principal)** | `100,000` |
+| **$n$** | **Term (in months)** | `9` |
+| **$r$** | **Monthly Interest Rate** | `5%` (`0.05`) |
+| **$p$** | **Penalty Rate** | `6%` (`0.06`) |
+
+---
+
+## 2. Mathematical Formulas
+
+### Method A: Diminishing Balance (Equal Principal)
+*In this method, the principal payment remains constant, while the interest decreases as the remaining balance goes down.*
+
+**1. Monthly Principal Payment ($M_p$)**
+$$M_p = \frac{P}{n}$$
+
+**2. Monthly Interest for Month $i$ ($I_i$)**
+$$I_i = B_{i-1} \times r$$
+*(Where $B_{i-1}$ is the Remaining Balance from the previous month. For Month 1, $B_0 = P$)*
+
+**3. Monthly Total Payable for Month $i$ ($T_i$)**
+$$T_i = M_p + I_i$$
+
+**4. Remaining Balance after Month $i$ ($B_i$)**
+$$B_i = B_{i-1} - M_p$$
+
+---
+
+### Method B: Flat Rate
+*In this method, interest is calculated on the original loan amount for the entire term. Both principal and interest remain constant every month.*
+
+**1. Monthly Principal Payment ($M_p$)**
+$$M_p = \frac{P}{n}$$
+
+**2. Monthly Interest ($I$)**
+$$I = P \times r$$
+*(This value is constant for all months)*
+
+**3. Monthly Total Payable ($T$)**
+$$T = M_p + I$$
+*(This value is constant for all months)*
+
+---
+
+### Penalty Calculation (Applies to both methods)
+*If a scheduled payment is overdue, a penalty is applied to that specific month's total payable.*
+
+**1. Penalty Amount ($Pen_i$)**
+$$Pen_i = T_i \times p$$
+
+**2. Total Due with Penalty ($Total_i$)**
+$$Total_i = T_i + Pen_i$$
+
+---
+
+## 3. Summary & Totals Formulas
+
+At the end of the term ($n$), the following totals must be calculated for the schedule summary:
+
+**1. Total Principal Paid**
+$$\text{Total Principal} = \sum_{i=1}^{n} M_p$$
+
+**2. Total Interest Paid**
+$$\text{Total Interest} = \sum_{i=1}^{n} I_i$$
+
+**3. Total Penalties**
+$$\text{Total Penalties} = \sum_{i=1}^{n} Pen_i$$
+
+**4. Grand Total Payable**
+$$\text{Grand Total} = \text{Total Principal} + \text{Total Interest} + \text{Total Penalties}$$

@@ -1,0 +1,79 @@
+:root {
+  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --mono: ui-monospace, 'Cascadia Mono', Consolas, monospace;
+
+  --gold-100: #fff4d6;
+  --gold-200: #ffe4a3;
+  --gold-300: #f8cf63;
+  --gold-400: #efb22c;
+  --gold-500: #d98d12;
+  --gold-600: #a9640a;
+  --gold-700: #6d3f08;
+
+  --bg: #120c05;
+  --bg-glow:
+    radial-gradient(1200px 600px at 12% -10%, rgba(239, 178, 44, 0.22), transparent 60%),
+    radial-gradient(900px 500px at 100% 0%, rgba(217, 141, 18, 0.18), transparent 55%),
+    radial-gradient(700px 700px at 50% 120%, rgba(169, 100, 10, 0.2), transparent 60%);
+
+  --surface: linear-gradient(158deg, #34250f 0%, #241809 42%, #2c1d0b 74%, #3a2810 100%);
+  --surface-raised: linear-gradient(158deg, #452f12 0%, #33220c 46%, #40290e 100%);
+  --surface-sunken: rgba(18, 12, 5, 0.55);
+
+  --text: #e8d3a6;
+  --text-strong: #fff8ea;
+  --border: rgba(239, 178, 44, 0.28);
+  --border-soft: rgba(239, 178, 44, 0.14);
+
+  --accent: var(--gold-400);
+  --accent-soft: rgba(239, 178, 44, 0.14);
+  --warning: #ffb020;
+  --warning-soft: rgba(255, 176, 32, 0.16);
+  --danger: #ff8a65;
+  --danger-soft: rgba(255, 138, 101, 0.14);
+
+  --gloss: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 244, 214, 0.1) 22%,
+    rgba(255, 255, 255, 0) 46%
+  );
+  --shadow: 0 1px 0 rgba(255, 244, 214, 0.16) inset, 0 18px 40px rgba(0, 0, 0, 0.45);
+  --shadow-soft: 0 1px 0 rgba(255, 244, 214, 0.12) inset, 0 10px 24px rgba(0, 0, 0, 0.35);
+
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--text);
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background-color: var(--bg);
+  background-image: var(--bg-glow);
+  background-attachment: fixed;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  color: var(--text-strong);
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+}
+
+#root {
+  min-height: 100vh;
+}
