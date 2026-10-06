@@ -1,6 +1,11 @@
 import { formatCurrency, formatDate } from "../lib/calculator";
 import type { AmortizationResult, LoanInput } from "../lib/calculator";
-import { penaltyPercentText, statementNote } from "../lib/statementNote";
+import { COMPANY } from "../lib/companyProfile";
+import {
+  penaltyPercentText,
+  statementContacts,
+  statementNote,
+} from "../lib/statementNote";
 
 interface PrintStatementProps {
   input: LoanInput;
@@ -26,8 +31,8 @@ export function PrintStatement({ input, result }: PrintStatementProps) {
     <div className="print-root" aria-hidden="true">
       <article className="print-sheet">
         <header className="print-banner">
-          <h1 className="print-company">JAMO LENDING CORP.</h1>
-          <p className="print-address">: Malasila, Makilala, North Cotabato</p>
+          <h1 className="print-company">{COMPANY.name}</h1>
+          <p className="print-address">{COMPANY.tagline}</p>
         </header>
 
         <h2 className="print-title">Amortization Schedule</h2>
@@ -85,6 +90,15 @@ export function PrintStatement({ input, result }: PrintStatementProps) {
         <p className="print-note">
           <strong>Note</strong>: {statementNote(input.penaltyRate)}
         </p>
+
+        <footer className="print-footer">
+          {statementContacts().map((contact, index) => (
+            <div className="print-contact" key={`${contact.label}-${index}`}>
+              {contact.label ? <span className="print-contact-label">{contact.label}</span> : null}
+              <span className="print-contact-value">{contact.value || " "}</span>
+            </div>
+          ))}
+        </footer>
       </article>
     </div>
   );

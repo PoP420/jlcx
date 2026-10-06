@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import "./print.css";
 import { InputPanel } from "./components/InputPanel";
@@ -7,6 +8,8 @@ import { SummaryCards } from "./components/SummaryCards";
 import { ExportButton } from "./components/ExportButton";
 import { PrintButton } from "./components/PrintButton";
 import { PrintStatement } from "./components/PrintStatement";
+import { NavBar } from "./components/NavBar";
+import { DailyLoanPage } from "./components/DailyLoanPage";
 import {
   DEFAULT_INPUT,
   calculateAmortization,
@@ -16,7 +19,7 @@ import {
   type LoanInput,
 } from "./lib/calculator";
 
-function App() {
+function AmortizationPage() {
   const [input, setInput] = useState<LoanInput>(DEFAULT_INPUT);
 
   const errors = useMemo(() => validateInput(input), [input]);
@@ -129,6 +132,19 @@ function App() {
       </div>
 
       {result && <PrintStatement input={input} result={result} />}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <>
+      <NavBar />
+      <Routes>
+        <Route path="/" element={<AmortizationPage />} />
+        <Route path="/daily-loan" element={<DailyLoanPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </>
   );
 }

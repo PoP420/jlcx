@@ -1,6 +1,6 @@
 import type { AmortizationResult, LoanInput } from "./calculator";
 import { parseIsoDate } from "./calculator";
-import { statementNote } from "./statementNote";
+import { statementContactLine, statementNote } from "./statementNote";
 
 export const FIRST_SCHEDULE_ROW = 19;
 
@@ -259,6 +259,7 @@ export function buildScheduleRows(
     ),
     totalRow(input.termMonths),
     noteRow(input.termMonths, input.penaltyRate),
+    contactRow(input.termMonths),
   ];
 }
 
@@ -360,10 +361,23 @@ function noteRow(termMonths: number, penaltyRate: number): string {
   );
 }
 
+function contactRow(termMonths: number): string {
+  const current = FIRST_SCHEDULE_ROW + termMonths + 2;
+  return row(
+    current,
+    [
+      cell(`B${current}`, { style: 27, text: statementContactLine() }),
+      ...range("C", "P", current, 27),
+    ],
+    { height: "20" },
+  );
+}
+
 function buildMerges(termMonths: number): string {
   const last = FIRST_SCHEDULE_ROW + termMonths - 1;
   const total = last + 1;
   const note = total + 1;
+  const contact = note + 1;
 
   const merges = new Set<string>([
     "B5:P5",
@@ -376,6 +390,7 @@ function buildMerges(termMonths: number): string {
     "C17:L17",
     "M17:P17",
     `B${note}:P${note}`,
+    `B${contact}:P${contact}`,
   ]);
 
   for (let current = 18; current <= total; current += 1) {
@@ -392,15 +407,23 @@ function buildMerges(termMonths: number): string {
     .join("")}</mergeCells>`;
 }
 
+export const LAST_CONTENT_ROW_OFFSET = 2;
+
+function lastContentRow(termMonths: number): number {
+  return FIRST_SCHEDULE_ROW + termMonths + LAST_CONTENT_ROW_OFFSET;
+}
+
 export function patchWorksheetXml(
   xml: string,
   input: LoanInput,
   result: AmortizationResult,
   dateStyles: DateStyles,
 ): string {
-  const note = FIRST_SCHEDULE_ROW + input.termMonths + 1;
   return xml
-    .replace(/<dimension ref="[^"]*"\/>/, `<dimension ref="A5:P${note}"/>`)
+    .replace(
+      /<dimension ref="[^"]*"\/>/,
+      `<dimension ref="A5:P${lastContentRow(input.termMonths)}"/>`,
+    )
     .replace(
       /<sheetData>[\s\S]*?<\/sheetData>/,
       `<sheetData>${buildScheduleRows(input, result, dateStyles).join("")}</sheetData>`,
@@ -409,9 +432,8 @@ export function patchWorksheetXml(
 }
 
 export function patchWorkbookXml(xml: string, termMonths: number): string {
-  const note = FIRST_SCHEDULE_ROW + termMonths + 1;
   return xml.replace(
     /_xlnm\.Print_Area" localSheetId="0">[^<]*</,
-    `_xlnm.Print_Area" localSheetId="0">Sheet1!$B$1:$P$${note}<`,
+    `_xlnm.Print_Area" localSheetId="0">Sheet1!$B$1:$P$${lastContentRow(termMonths)}<`,
   );
 }

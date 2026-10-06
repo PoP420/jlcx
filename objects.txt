@@ -1,0 +1,54 @@
+=== Object 4 (filter=FlateDecode, len=14911) ===
+DECODE_ERROR: incorrect header check
+
+=== Object 30 (filter=FlateDecode, len=4782) ===
+DECODE_ERROR: incorrect header check
+
+=== Object 356 (filter=FlateDecode, len=33894) ===
+DECODE_ERROR: incorrect header check
+
+=== Object 357 (filter=FlateDecode, len=408) ===
+DECODE_ERROR: incorrect header check
+
+=== Object 358 (filter=FlateDecode, len=43879) ===
+DECODE_ERROR: incorrect header check
+
+=== Object 362 (filter=FlateDecode, len=24989) ===
+DECODE_ERROR: incorrect header check
+
+=== Object 363 (filter=none, len=3058) ===
+
+<?xpacket begin="﻿" id="W5M0MpCehiHzreSzNTczkc9d"?><x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="3.1-701">
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<rdf:Description rdf:about=""  xmlns:pdf="http://ns.adobe.com/pdf/1.3/">
+<pdf:Producer>Microsoft® Word LTSC</pdf:Producer></rdf:Description>
+<rdf:Description rdf:about=""  xmlns:dc="http://purl.org/dc/elements/1.1/">
+<dc:creator><rdf:Seq><rdf:li>Un-named</rdf:li></rdf:Seq></dc:creator></rdf:Description>
+<rdf:Description rdf:about=""  xmlns:xmp="http://ns.adobe.com/xap/1.0/">
+<xmp:CreatorTool>Microsoft® Word LTSC</xmp:CreatorTool><xmp:CreateDate>2026-10-06T11:28:21+08:00</xmp:CreateDate><xmp:ModifyDate>2026-10-06T11:28:21+08:00</xmp:ModifyDate></rdf:Description>
+<rdf:Description rdf:about=""  xmlns:xmpMM="http://ns.adobe.com/xap/1.0/mm/">
+<xmpMM:DocumentID>uuid:AE33CA4F-4527-49E7-B320-CB6B7541C853</xmpMM:DocumentID><xmpMM:InstanceID>uuid:AE33CA4F-4527-49E7-B320-CB6B7541C853</xmpMM:InstanceID></rdf:Description>
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+                                                                                                    
+</rdf:RDF></x:xmpmeta><?xpacket end="w"?
+
+=== Object 365 (filter=FlateDecode, len=745) ===
+DECODE_ERROR: incorrect header check
