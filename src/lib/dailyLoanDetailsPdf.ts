@@ -40,21 +40,24 @@ export async function createDailyLoanDetailsPdf(result: DailyLoanResult): Promis
   const page = pdf.getPages()[0];
   if (!page || pdf.getPageCount() !== 1) throw new Error("The daily loan template must contain one page.");
 
-  const font = await pdf.embedFont(StandardFonts.Helvetica);
   const boldFont = await pdf.embedFont(StandardFonts.HelveticaBold);
   const black = rgb(0, 0, 0);
   const text = (content: string, x: number, top: number, width: number, size = 7.4, aligned: "left" | "right" = "left", line = false) => {
     const adjustedTop = line ? top - 3.5 : top;
     const baseline = PAGE_HEIGHT - adjustedTop - size;
-    drawText(page, font, content, x, baseline, width, black, size, aligned);
+    drawText(page, boldFont, content, x, baseline, width, black, size, aligned);
   };
   const amount = (n: number, top: number, x = 480, width = 98) =>
-    text(formatAmount(n), x, top, width, 7.4, "right", true);
+    text(formatAmount(n), x, top, width, 8.8, "right", true);
   const check = (x: number, top: number, checked: boolean) => {
     if (!checked) return;
     const baseline = PAGE_HEIGHT - top - 8;
     page.drawText("X", { x, y: baseline, size: 6.5, font: boldFont, color: black });
   };
+
+  // The client name is populated in its existing form fields along with the selected summaries.
+  text(result.fullName.trim(), 135, 111, 160, 8.5);
+  text(result.fullName.trim(), 310, 458, 166, 8.5, "left", true);
 
   // Loan Details & Financial Summary rows.
   amount(result.principal, 111);
@@ -62,8 +65,8 @@ export async function createDailyLoanDetailsPdf(result: DailyLoanResult): Promis
   check(499, 130, result.termMonths === 2);
   amount(result.interest, 148);
   amount(result.totalDue, 167);
-  text(formatDate(result.releaseDate), 459, 186, 140, 7.2);
-  text(formatDate(result.maturityDate), 459, 205, 140, 7.2);
+  text(formatDate(result.releaseDate), 459, 186, 140, 8);
+  text(formatDate(result.maturityDate), 459, 205, 140, 8);
 
   // Amount Computation rows.
   amount(result.principal, 238);
