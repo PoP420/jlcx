@@ -1,0 +1,11 @@
+﻿Field,Computed Value
+Loan Amount (Principal),"PHP 10,000"
+Loan Term,2 Months
+Interest (10%/mo × 2),"PHP 2,000"
+Total (Principal + Interest),"PHP 12,000"
+Release Date,6-Oct-26
+Maturity Date,6-Dec-26
+Processing Fee (5%),PHP 500
+2% Rebate,PHP 0
+Net Proceeds to Borrower,"PHP 9,500"
+Daily Payment Amount,PHP 200

@@ -1,0 +1,11 @@
+Principal (P)            = 10,000
+Loan Term in Months (T)  = 2
+Monthly Interest Rate    = 10% (0.10)
+Processing Fee Rate      = 5% (0.05)
+Rebate Rate              = 2% (0.02) 
+Is Qualified for Rebate  = False
+Previous Balance         = 0
+Advance Payment          = 0
+Passbook Fee             = 0
+Release Date             = 2026-10-06 (Today's Date)
+Days per Month (Standard)= 30 (Common in PH microfinance daily loans)
