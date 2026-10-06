@@ -9,8 +9,6 @@ import {
   validateDailyLoanInput,
 } from "../lib/dailyLoanCalculator";
 import { formatCurrency, formatDate } from "../lib/calculator";
-import { DailyLoanPrintButton } from "./DailyLoanPrintButton";
-import { DailyLoanDownloadButton } from "./DailyLoanDownloadButton";
 import { DailyLoanDetailsActions } from "./DailyLoanDetailsActions";
 
 interface FieldProps {
@@ -45,11 +43,6 @@ function ReadOnlyField({ label, hint, value }: { label: string; hint: string; va
   );
 }
 
-const REBATE_OPTIONS = [
-  { value: false, label: "No", detail: "Not qualified for rebate" },
-  { value: true, label: "Yes", detail: "Qualified for 2% rebate" },
-] as const;
-
 export function DailyLoanPage() {
   const [input, setInput] = useState<DailyLoanInput>(DEFAULT_DAILY_LOAN_INPUT);
 
@@ -63,8 +56,6 @@ export function DailyLoanPage() {
   const set = <K extends keyof DailyLoanInput>(key: K, next: DailyLoanInput[K]) =>
     setInput({ ...input, [key]: next });
 
-  const handleRebateChange = (checked: boolean) => set("rebateApplicable", checked);
-
   return (
     <>
       <div className="daily-loan-page">
@@ -76,8 +67,9 @@ export function DailyLoanPage() {
           penalty — per the JAMO lending disclosure (RA 3765).
         </p>
         <div className="export-actions">
-          {result && <DailyLoanDownloadButton result={result} />}
-          {result && <DailyLoanPrintButton result={result} />}
+          {/* Temporarily hidden: complete statement export actions. */}
+          {/* {result && <DailyLoanDownloadButton result={result} />} */}
+          {/* {result && <DailyLoanPrintButton result={result} />} */}
           {result && <DailyLoanDetailsActions result={result} />}
         </div>
       </header>
@@ -222,9 +214,9 @@ export function DailyLoanPage() {
             <ReadOnlyField
               label="2% Rebate (if qualified)"
               hint={
-                (result?.rebateAmount ?? 0) > 0
-                  ? "Credited to net proceeds (on-time + ≤3 absences)"
-                  : "Rebate applies only when qualified"
+                (result?.rebateDays ?? 0) > 0
+                  ? `2% of principal for each of ${result?.rebateDays} selected day(s)`
+                  : "Enter qualifying rebate days below"
               }
               value={result ? formatCurrency(result.rebateAmount) : formatCurrency(0)}
             />
@@ -304,38 +296,23 @@ export function DailyLoanPage() {
             />
           </div>
 
-          <div className="field">
-            <span className="field-label" id="rebate-heading">
-              Rebate Applicable?
-            </span>
-            <div
-              className="segmented segmented-inline"
-              role="radiogroup"
-              aria-labelledby="rebate-heading"
-            >
-              {REBATE_OPTIONS.map((option) => (
-                <button
-                  key={String(option.value)}
-                  type="button"
-                  role="radio"
-                  aria-checked={input.rebateApplicable === option.value}
-                  className={
-                    input.rebateApplicable === option.value
-                      ? "segment segment-inline active"
-                      : "segment segment-inline"
-                  }
-                  onClick={() => handleRebateChange(option.value)}
-                >
-                  <span className="segment-label">{option.label}</span>
-                  <span className="segment-detail">{option.detail}</span>
-                </button>
-              ))}
-            </div>
-            <p className="field-hint">
-              Granted when the borrower pays on time and does not exceed 3 absences (Mon–Sat; Sun
-              excluded).
-            </p>
-          </div>
+          <Field
+            id="rebateDays"
+            label="Rebate Days"
+            hint={`Rebate is 2% of principal per selected day; choose 0 to ${input.termMonths * 30} days.`}
+            error={errorFor("rebate days")}
+          >
+            <input
+              id="rebateDays"
+              className="input"
+              type="number"
+              min={0}
+              max={input.termMonths * 30}
+              step={1}
+              value={Number.isFinite(input.rebateDays) ? input.rebateDays : ""}
+              onChange={(event) => set("rebateDays", Number(event.target.value))}
+            />
+          </Field>
         </section>
 
         {errors.length > 0 && (
@@ -364,6 +341,7 @@ export function DailyLoanPage() {
             <ResultRow label="Maturity Date" value={formatDate(result.maturityDate)} />
             <ResultRow label="Processing Fee (5%)" value={formatCurrency(result.processingFee)} />
             <ResultRow label="2% Rebate" value={formatCurrency(result.rebateAmount)} />
+            <ResultRow label="Rebate Days" value={String(result.rebateDays)} />
             <ResultRow label="Prev. Balance" value={formatCurrency(result.prevBalance)} />
             <ResultRow label="Advance Payment" value={formatCurrency(result.advPayment)} />
             <ResultRow label="Passbook Fee" value={formatCurrency(result.passbookFee)} />
