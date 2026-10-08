@@ -48,7 +48,7 @@ export async function createDailyLoanDetailsPdf(result: DailyLoanResult): Promis
     drawText(page, boldFont, content, x, baseline, width, black, size, aligned);
   };
   const amount = (n: number, top: number, x = 480, width = 98) =>
-    text(formatAmount(n), x, top, width, 8.8, "right", true);
+    text(formatAmount(n), x, top, width, 10.5, "right", true);
   const check = (x: number, top: number, checked: boolean) => {
     if (!checked) return;
     const baseline = PAGE_HEIGHT - top - 8;
@@ -56,8 +56,8 @@ export async function createDailyLoanDetailsPdf(result: DailyLoanResult): Promis
   };
 
   // The client name is populated in its existing form fields along with the selected summaries.
-  text(result.fullName.trim(), 135, 111, 160, 8.5);
-  text(result.fullName.trim(), 310, 458, 166, 8.5, "left", true);
+  text(result.fullName.trim(), 135, 111, 160, 10);
+  text(result.fullName.trim(), 310, 458, 166, 9.5, "left", true);
 
   // Loan Details & Financial Summary rows.
   amount(result.principal, 111);
@@ -65,8 +65,8 @@ export async function createDailyLoanDetailsPdf(result: DailyLoanResult): Promis
   check(499, 130, result.termMonths === 2);
   amount(result.interest, 148);
   amount(result.totalDue, 167);
-  text(formatDate(result.releaseDate), 459, 186, 140, 8);
-  text(formatDate(result.maturityDate), 459, 205, 140, 8);
+  text(formatDate(result.releaseDate), 459, 186, 140, 9.5);
+  text(formatDate(result.maturityDate), 459, 205, 140, 9.5);
 
   // Amount Computation rows.
   amount(result.principal, 238);

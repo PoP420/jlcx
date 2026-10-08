@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
 import "./App.css";
 import "./print.css";
 import { InputPanel } from "./components/InputPanel";
@@ -9,7 +9,13 @@ import { ExportButton } from "./components/ExportButton";
 import { PrintButton } from "./components/PrintButton";
 import { PrintStatement } from "./components/PrintStatement";
 import { NavBar } from "./components/NavBar";
+import { LoginPage } from "./components/LoginPage";
 import { DailyLoanPage } from "./components/DailyLoanPage";
+import { DashboardPage } from "./components/DashboardPage";
+import { CashCountPage } from "./components/CashCountPage";
+import { CollectorsPage } from "./components/CollectorsPage";
+import { AppShell } from "./components/Layout";
+import { AuthProvider, useAuth } from "./context/AuthContext";
 import {
   DEFAULT_INPUT,
   calculateAmortization,
@@ -136,16 +142,57 @@ function AmortizationPage() {
   );
 }
 
-function App() {
+function PublicShell() {
   return (
     <>
       <NavBar />
+      <Outlet />
+    </>
+  );
+}
+
+function Shell() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="page-loading">Loading...</div>;
+  }
+
+  return user ? <AppShell /> : <PublicShell />;
+}
+
+function ProtectedRoute() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div className="page-loading">Loading...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Outlet />;
+}
+
+function App() {
+  return (
+    <AuthProvider>
       <Routes>
-        <Route path="/" element={<AmortizationPage />} />
-        <Route path="/daily-loan" element={<DailyLoanPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route element={<Shell />}>
+          <Route path="/" element={<AmortizationPage />} />
+          <Route path="/daily-loan" element={<DailyLoanPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/amortization" element={<AmortizationPage />} />
+            <Route path="/cash-count" element={<CashCountPage />} />
+            <Route path="/collectors" element={<CollectorsPage />} />
+          </Route>
+        </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
-    </>
+    </AuthProvider>
   );
 }
 

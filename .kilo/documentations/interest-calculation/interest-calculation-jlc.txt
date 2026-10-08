@@ -11,6 +11,7 @@ The calculator must use the following base variables and default values to perfo
 | **$r$** | **Monthly Interest Rate** | `5%` (`0.05`) |
 | **$p$** | **Penalty Rate** | `6%` (`0.06`) |
 
+
 ---
 
 ## 2. Mathematical Formulas

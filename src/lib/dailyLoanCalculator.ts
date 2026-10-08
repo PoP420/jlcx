@@ -2,7 +2,6 @@ import { addMonths, parseIsoDate, todayIso, toIsoDate } from "./calculator";
 
 export const INTEREST_RATE = 0.1;
 export const PROCESSING_FEE_RATE = 0.05;
-export const REBATE_RATE = 0.02;
 export const DAYS_PER_MONTH = 30;
 export const MAX_TERM_MONTHS = 2;
 export const OVERDUE_PENALTY_RATE = 0.03;
@@ -12,7 +11,7 @@ export interface DailyLoanInput {
   principal: number;
   termMonths: number;
   releaseDate: string;
-  rebateDays: number;
+  rebateAmount: number;
   prevBalance: number;
   advPayment: number;
   passbookFee: number;
@@ -28,7 +27,6 @@ export interface DailyLoanResult {
   maturityDate: string;
   processingFee: number;
   rebateAmount: number;
-  rebateDays: number;
   prevBalance: number;
   advPayment: number;
   passbookFee: number;
@@ -43,7 +41,7 @@ export const DEFAULT_DAILY_LOAN_INPUT: DailyLoanInput = {
   principal: 10_000,
   termMonths: 2,
   releaseDate: todayIso(),
-  rebateDays: 0,
+  rebateAmount: 0,
   prevBalance: 0,
   advPayment: 0,
   passbookFee: 0,
@@ -66,9 +64,8 @@ export function validateDailyLoanInput(input: DailyLoanInput): string[] {
     errors.push("Release date must be a valid calendar date.");
   }
 
-  const rebateDayLimit = input.termMonths * DAYS_PER_MONTH;
-  if (!Number.isInteger(input.rebateDays) || input.rebateDays < 0 || input.rebateDays > rebateDayLimit) {
-    errors.push(`Rebate days must be between 0 and ${rebateDayLimit}.`);
+  if (!Number.isFinite(input.rebateAmount) || input.rebateAmount < 0) {
+    errors.push("Rebate amount cannot be negative.");
   }
 
   if (!Number.isFinite(input.prevBalance) || input.prevBalance < 0) {
@@ -87,15 +84,13 @@ export function validateDailyLoanInput(input: DailyLoanInput): string[] {
 }
 
 export function calculateDailyLoan(input: DailyLoanInput): DailyLoanResult {
-  const { principal, termMonths, rebateDays, releaseDate, prevBalance, advPayment, passbookFee } = input;
+  const { principal, termMonths, rebateAmount, releaseDate, prevBalance, advPayment, passbookFee } = input;
 
   const interest = principal * INTEREST_RATE * termMonths;
   const totalDue = principal + interest;
 
   const processingFee = principal * PROCESSING_FEE_RATE;
   const totalDays = termMonths * DAYS_PER_MONTH;
-  const rebateAmount = principal * REBATE_RATE * rebateDays;
-
   const netProceeds = principal - processingFee + rebateAmount - prevBalance + advPayment - passbookFee;
 
   const dailyPayment = totalDue / totalDays;
@@ -114,7 +109,6 @@ export function calculateDailyLoan(input: DailyLoanInput): DailyLoanResult {
     maturityDate: toIsoDate(maturity),
     processingFee,
     rebateAmount,
-    rebateDays,
     prevBalance,
     advPayment,
     passbookFee,
