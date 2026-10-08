@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.2",
     "dompurify": "^3.4.16",
     "fflate": "^0.8.3",
     "pdf-lib": "^1.17.1",

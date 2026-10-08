@@ -211,15 +211,25 @@ export function DailyLoanPage() {
               value={result ? formatCurrency(result.processingFee) : formatCurrency(0)}
             />
 
-            <ReadOnlyField
+            <Field
+              id="rebateAmount"
               label="2% Rebate (if qualified)"
-              hint={
-                (result?.rebateDays ?? 0) > 0
-                  ? `2% of principal for each of ${result?.rebateDays} selected day(s)`
-                  : "Enter qualifying rebate days below"
-              }
-              value={result ? formatCurrency(result.rebateAmount) : formatCurrency(0)}
-            />
+              hint="Manually enter the total rebate amount in PHP. It is not calculated by days."
+              error={errorFor("rebate amount")}
+            >
+              <div className="input-affix">
+                <input
+                  id="rebateAmount"
+                  className="input"
+                  type="number"
+                  min={0}
+                  step={0.01}
+                  value={Number.isFinite(input.rebateAmount) ? input.rebateAmount : ""}
+                  onChange={(event) => set("rebateAmount", Number(event.target.value))}
+                />
+                <span className="affix">PHP</span>
+              </div>
+            </Field>
 
             <Field
               id="prevBalance"
@@ -296,23 +306,6 @@ export function DailyLoanPage() {
             />
           </div>
 
-          <Field
-            id="rebateDays"
-            label="Rebate Days"
-            hint={`Rebate is 2% of principal per selected day; choose 0 to ${input.termMonths * 30} days.`}
-            error={errorFor("rebate days")}
-          >
-            <input
-              id="rebateDays"
-              className="input"
-              type="number"
-              min={0}
-              max={input.termMonths * 30}
-              step={1}
-              value={Number.isFinite(input.rebateDays) ? input.rebateDays : ""}
-              onChange={(event) => set("rebateDays", Number(event.target.value))}
-            />
-          </Field>
         </section>
 
         {errors.length > 0 && (
@@ -340,8 +333,7 @@ export function DailyLoanPage() {
             <ResultRow label="Release Date" value={formatDate(result.releaseDate)} />
             <ResultRow label="Maturity Date" value={formatDate(result.maturityDate)} />
             <ResultRow label="Processing Fee (5%)" value={formatCurrency(result.processingFee)} />
-            <ResultRow label="2% Rebate" value={formatCurrency(result.rebateAmount)} />
-            <ResultRow label="Rebate Days" value={String(result.rebateDays)} />
+            <ResultRow label="2% Rebate (total)" value={formatCurrency(result.rebateAmount)} />
             <ResultRow label="Prev. Balance" value={formatCurrency(result.prevBalance)} />
             <ResultRow label="Advance Payment" value={formatCurrency(result.advPayment)} />
             <ResultRow label="Passbook Fee" value={formatCurrency(result.passbookFee)} />
