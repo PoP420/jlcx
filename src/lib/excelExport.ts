@@ -2,7 +2,7 @@ import { unzipSync, zipSync, strToU8, strFromU8 } from "fflate";
 import { patchStylesXml, patchWorkbookXml, patchWorksheetXml } from "./excelTemplate";
 import type { AmortizationResult, LoanInput } from "./calculator";
 
-const TEMPLATE_URL = `${import.meta.env.BASE_URL}amortization-template.xlsx`;
+const TEMPLATE_URL = "/amortization-template.xlsx";
 
 const XLSX_MIME = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
 
