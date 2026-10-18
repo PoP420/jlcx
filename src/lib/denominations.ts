@@ -1,4 +1,4 @@
-export const DENOMINATIONS = [1000, 500, 200, 100, 50, 5, 1] as const;
+export const DENOMINATIONS = [1000, 500, 200, 100, 50, 20, 10, 5, 1] as const;
 
 export type DenominationCounts = Record<string, number>;
 

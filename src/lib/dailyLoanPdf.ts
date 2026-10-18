@@ -1,8 +1,7 @@
 import type { PDFFont, PDFPage, RGB } from "pdf-lib";
 import type { DailyLoanResult } from "./dailyLoanCalculator";
 import { formatDate } from "./calculator";
-
-const TEMPLATE_URL = `${import.meta.env.BASE_URL}daily-loan-template.pdf`;
+import templateUrl from "../assets/daily-loan-template.pdf?url";
 const PAGE_HEIGHT = 1008;
 
 function formatAmount(value: number): string {
@@ -90,7 +89,7 @@ function drawCheck(
 export async function createFilledDailyLoanPdf(result: DailyLoanResult): Promise<Uint8Array> {
   const { PDFDocument, StandardFonts, rgb } = await import("pdf-lib");
   const black = rgb(0, 0, 0);
-  const response = await fetch(TEMPLATE_URL);
+  const response = await fetch(templateUrl);
   if (!response.ok) throw new Error(`Could not load the daily loan PDF template (${response.status}).`);
 
   const pdf = await PDFDocument.load(await response.arrayBuffer());
@@ -147,6 +146,7 @@ export async function createFilledDailyLoanPdf(result: DailyLoanResult): Promise
   lineValue(formatAmount(result.dailyPaymentRounded), 418, 588, 50, 7.0, "right");
   lineValue(formatDate(result.maturityDate), 386, 610, 63, 7.0);
   lineValue(formatAmount(result.dailyPaymentRounded), 548, 847, 31, 6.8, "right");
+  lineValue(result.collectorName.trim(), 382, 787, 198, 8.5);
 
   return pdf.save();
 }

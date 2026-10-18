@@ -28,9 +28,12 @@ export interface CashLedgerEntry {
   id: string;
   collector_id: string | null;
   loan_id: string | null;
-  type: "release" | "collection";
+  type: "release" | "collection" | "expense" | "transfer_in" | "transfer_out";
   amount: number;
   note: string | null;
+  category: string | null;
+  reference: string | null;
+  counterparty: string | null;
   denominations: DenominationCounts | null;
   occurred_on: string;
   created_at: string;
@@ -44,6 +47,40 @@ export interface CashOpening {
   updated_at: string;
 }
 
+export type PositionMode = "bank" | "digital";
+export type PositionAccount = "metrobank" | "eastwest" | "jamo_savings" | "gcash" | "cebuana";
+export type PositionDirection = "inflow" | "outflow";
+
+export interface PositionOpening {
+  id: string;
+  created_by: string;
+  mode: PositionMode;
+  account_code: PositionAccount;
+  occurred_on: string;
+  amount: number;
+}
+
+export interface PositionEntry {
+  id: string;
+  mode: PositionMode;
+  account_code: PositionAccount;
+  direction: PositionDirection;
+  category: string;
+  reference: string | null;
+  counterparty: string | null;
+  amount: number;
+  note: string | null;
+  occurred_on: string;
+  created_at: string;
+}
+
+export interface PhysicalCashCount {
+  occurred_on: string;
+  amount: number;
+  denominations: DenominationCounts;
+  ownDenominations: DenominationCounts;
+}
+
 export interface DashboardStats {
   cashOnHand: number;
   activeLoans: number;
@@ -54,6 +91,140 @@ export interface DashboardStats {
 export interface ServiceResult<T> {
   data: T | null;
   error: string | null;
+}
+
+/** Reads bank and digital openings and movements for one report date. */
+export async function fetchPositionData(occurredOn: string): Promise<ServiceResult<{
+  openings: PositionOpening[];
+  ownOpenings: Partial<Record<PositionAccount, number>>;
+  entries: PositionEntry[];
+}>> {
+  const userId = await currentUserId();
+  if (!userId) return { data: null, error: "Not signed in." };
+  const [openingsResult, entriesResult] = await Promise.all([
+    supabase.from("cash_position_openings")
+      .select("id, created_by, mode, account_code, occurred_on, amount")
+      .eq("occurred_on", occurredOn),
+    supabase.from("cash_position_ledger")
+      .select("id, mode, account_code, direction, category, reference, counterparty, amount, note, occurred_on, created_at")
+      .eq("occurred_on", occurredOn)
+      .order("created_at", { ascending: true }),
+  ]);
+  if (openingsResult.error) return { data: null, error: openingsResult.error.message };
+  if (entriesResult.error) return { data: null, error: entriesResult.error.message };
+  return {
+    data: {
+      openings: (openingsResult.data ?? []).map((row) => ({
+        id: String(row.id), created_by: String(row.created_by), mode: row.mode as PositionMode, account_code: row.account_code as PositionAccount,
+        occurred_on: String(row.occurred_on), amount: Number(row.amount),
+      })),
+      ownOpenings: Object.fromEntries((openingsResult.data ?? [])
+        .filter((row) => row.created_by === userId)
+        .map((row) => [row.account_code, Number(row.amount)])) as Partial<Record<PositionAccount, number>>,
+      entries: (entriesResult.data ?? []).map((row) => ({
+        id: String(row.id), mode: row.mode as PositionMode, account_code: row.account_code as PositionAccount,
+        direction: row.direction as PositionDirection, category: String(row.category),
+        reference: row.reference == null ? null : String(row.reference),
+        counterparty: row.counterparty == null ? null : String(row.counterparty), amount: Number(row.amount),
+        note: row.note == null ? null : String(row.note),
+        occurred_on: String(row.occurred_on), created_at: String(row.created_at),
+      })),
+    },
+    error: null,
+  };
+}
+
+export async function setPositionOpening(
+  mode: PositionMode, accountCode: PositionAccount, occurredOn: string, amount: number,
+): Promise<ServiceResult<PositionOpening>> {
+  const userId = await currentUserId();
+  if (!userId) return { data: null, error: "Not signed in." };
+  const { data, error } = await supabase.from("cash_position_openings")
+    .upsert({ mode, account_code: accountCode, occurred_on: occurredOn, amount, created_by: userId },
+      { onConflict: "created_by,account_code,occurred_on" })
+    .select("id, created_by, mode, account_code, occurred_on, amount")
+    .single();
+  if (error) return { data: null, error: error.message };
+  return { data: {
+    id: String(data.id), created_by: String(data.created_by), mode: data.mode as PositionMode, account_code: data.account_code as PositionAccount,
+    occurred_on: String(data.occurred_on), amount: Number(data.amount),
+  }, error: null };
+}
+
+export async function recordPositionEntry(
+  mode: PositionMode, accountCode: PositionAccount, direction: PositionDirection, amount: number,
+  occurredOn: string, category: string, note: string, reference: string, counterparty: string,
+): Promise<ServiceResult<PositionEntry>> {
+  const userId = await currentUserId();
+  if (!userId) return { data: null, error: "Not signed in." };
+  if (category === "Cash deposit" || category === "Cash withdrawal") {
+    const expected = category === "Cash deposit" ? "inflow" : "outflow";
+    if (direction !== expected) {
+      return { data: null, error: `${category} must be recorded as an ${expected}.` };
+    }
+    const { error } = await supabase.rpc("record_cash_position_transfer", {
+      p_mode: mode, p_account_code: accountCode, p_direction: direction,
+      p_amount: amount, p_occurred_on: occurredOn, p_category: category,
+      p_reference: reference.trim() || null,
+      p_counterparty: counterparty.trim() || null,
+      p_note: note.trim() || null,
+    });
+    return error ? { data: null, error: error.message } : { data: null, error: null };
+  }
+  const { data, error } = await supabase.from("cash_position_ledger")
+    .insert({ mode, account_code: accountCode, direction, amount, occurred_on: occurredOn,
+      category, reference: reference.trim() || null, counterparty: counterparty.trim() || null,
+      note: note.trim() || null, created_by: userId })
+    .select("id, mode, account_code, direction, category, reference, counterparty, amount, note, occurred_on, created_at")
+    .single();
+  if (error) return { data: null, error: error.message };
+  return { data: {
+    id: String(data.id), mode: data.mode as PositionMode, account_code: data.account_code as PositionAccount,
+    direction: data.direction as PositionDirection, category: String(data.category),
+    reference: data.reference == null ? null : String(data.reference),
+    counterparty: data.counterparty == null ? null : String(data.counterparty), amount: Number(data.amount),
+    note: data.note == null ? null : String(data.note),
+    occurred_on: String(data.occurred_on), created_at: String(data.created_at),
+  }, error: null };
+}
+
+export async function fetchPhysicalCashCount(
+  occurredOn: string,
+): Promise<ServiceResult<PhysicalCashCount | null>> {
+  const userId = await currentUserId();
+  if (!userId) return { data: null, error: "Not signed in." };
+  const { data, error } = await supabase.from("cash_position_counts")
+    .select("created_by, occurred_on, amount, denominations")
+    .eq("occurred_on", occurredOn);
+  if (error) return { data: null, error: error.message };
+  const combined = emptyDenominationCounts();
+  let ownDenominations = emptyDenominationCounts();
+  for (const row of data ?? []) {
+    const rowCounts = asDenominations(row.denominations);
+    if (row.created_by === userId) ownDenominations = rowCounts;
+    for (const [denomination, count] of Object.entries(rowCounts)) {
+      combined[denomination] = (combined[denomination] ?? 0) + count;
+    }
+  }
+  return { data: data?.length ? {
+    occurred_on: occurredOn, amount: countsTotal(combined), denominations: combined, ownDenominations,
+  } : { occurred_on: occurredOn, amount: 0, denominations: combined, ownDenominations }, error: null };
+}
+
+export async function setPhysicalCashCount(
+  occurredOn: string, denominations: DenominationCounts,
+): Promise<ServiceResult<PhysicalCashCount>> {
+  const userId = await currentUserId();
+  if (!userId) return { data: null, error: "Not signed in." };
+  const amount = countsTotal(denominations);
+  const { data, error } = await supabase.from("cash_position_counts")
+    .upsert({ occurred_on: occurredOn, amount, denominations, created_by: userId },
+      { onConflict: "created_by,occurred_on" })
+    .select("created_by, occurred_on, amount, denominations")
+    .single();
+  if (error) return { data: null, error: error.message };
+  return { data: { occurred_on: String(data.occurred_on), amount: Number(data.amount),
+    denominations: asDenominations(data.denominations), ownDenominations: asDenominations(data.denominations) }, error: null };
 }
 
 async function currentUserId(): Promise<string | null> {
@@ -95,9 +266,12 @@ function asLedgerEntry(row: unknown): CashLedgerEntry {
     id: String(value.id),
     collector_id: value.collector_id == null ? null : String(value.collector_id),
     loan_id: value.loan_id == null ? null : String(value.loan_id),
-    type: value.type === "collection" ? "collection" : "release",
+    type: value.type === "collection" ? "collection" : value.type === "expense" ? "expense" : value.type === "transfer_in" ? "transfer_in" : value.type === "transfer_out" ? "transfer_out" : "release",
     amount: Number(value.amount),
     note: value.note == null ? null : String(value.note),
+    category: value.category == null ? null : String(value.category),
+    reference: value.reference == null ? null : String(value.reference),
+    counterparty: value.counterparty == null ? null : String(value.counterparty),
     denominations:
       value.denominations == null
         ? null
@@ -331,13 +505,6 @@ export async function recordCashRelease(
 
   if (loanError) return { data: null, error: loanError.message };
 
-  const details = [
-    reference.trim() ? `Ref ${reference.trim()}` : "",
-    note.trim(),
-  ]
-    .filter(Boolean)
-    .join(" - ");
-
   const { data: entry, error: entryError } = await supabase
     .from("cash_ledger")
     .insert({
@@ -345,8 +512,11 @@ export async function recordCashRelease(
       loan_id: loan.id,
       type: "release",
       amount,
+      category: "Loan disbursement",
+      reference: reference.trim() || null,
+      counterparty: borrowerName,
       denominations,
-      note: details.length > 0 ? details : null,
+      note: note.trim() || null,
       occurred_on: occurredOn,
       created_by: userId,
     })
@@ -363,16 +533,10 @@ export async function recordCashCollection(
   payerName: string,
   note: string,
   occurredOn: string,
+  reference = "",
 ): Promise<ServiceResult<CashLedgerEntry>> {
   const userId = await currentUserId();
   if (!userId) return { data: null, error: "Not signed in." };
-
-  const details = [
-    payerName.trim() ? `From ${payerName.trim()}` : "",
-    note.trim(),
-  ]
-    .filter(Boolean)
-    .join(" - ");
 
   const { data, error } = await supabase
     .from("cash_ledger")
@@ -380,15 +544,36 @@ export async function recordCashCollection(
       collector_id: collectorId,
       type: "collection",
       amount,
-      note: details.length > 0 ? details : null,
+      category: "Cash collection",
+      counterparty: payerName.trim() || null,
+      reference: reference.trim() || null,
+      note: note.trim() || null,
       occurred_on: occurredOn,
       created_by: userId,
     })
     .select(
-      "id, collector_id, loan_id, type, amount, note, occurred_on, created_at",
+      "id, collector_id, loan_id, type, amount, note, category, reference, counterparty, occurred_on, created_at",
     )
     .single();
 
+  if (error) return { data: null, error: error.message };
+  return { data: asLedgerEntry(data), error: null };
+}
+
+export async function recordCashExpense(
+  amount: number, occurredOn: string, category: string, payee: string,
+  reference: string, note: string,
+): Promise<ServiceResult<CashLedgerEntry>> {
+  const userId = await currentUserId();
+  if (!userId) return { data: null, error: "Not signed in." };
+  const { data, error } = await supabase.from("cash_ledger")
+    .insert({
+      type: "expense", amount, occurred_on: occurredOn, category,
+      counterparty: payee.trim() || null, reference: reference.trim() || null,
+      note: note.trim() || null, created_by: userId,
+    })
+    .select("id, collector_id, loan_id, type, amount, note, category, reference, counterparty, denominations, occurred_on, created_at")
+    .single();
   if (error) return { data: null, error: error.message };
   return { data: asLedgerEntry(data), error: null };
 }
@@ -401,7 +586,7 @@ export async function fetchLedger(
   let query = supabase
     .from("cash_ledger")
     .select(
-      "id, collector_id, loan_id, type, amount, note, denominations, occurred_on, created_at",
+      "id, collector_id, loan_id, type, amount, note, category, reference, counterparty, denominations, occurred_on, created_at",
     )
     .eq("occurred_on", occurredOn)
     .order("created_at", { ascending: true });
@@ -427,10 +612,10 @@ export async function fetchCashOnHand(
 
   const entries = ledgerResult.data ?? [];
   const released = entries
-    .filter((entry) => entry.type === "release")
+    .filter((entry) => entry.type === "release" || entry.type === "expense" || entry.type === "transfer_out")
     .reduce((sum, entry) => sum + entry.amount, 0);
   const collected = entries
-    .filter((entry) => entry.type === "collection")
+    .filter((entry) => entry.type === "collection" || entry.type === "transfer_in")
     .reduce((sum, entry) => sum + entry.amount, 0);
 
   return {

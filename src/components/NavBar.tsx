@@ -4,7 +4,6 @@ import { useAuth } from "../context/AuthContext";
 
 const links = [
   { to: "/", label: "Amortization" },
-  { to: "/daily-loan", label: "Daily Loan" },
 ] as const;
 
 export function NavBar() {

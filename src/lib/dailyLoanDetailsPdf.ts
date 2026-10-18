@@ -1,8 +1,7 @@
 import type { PDFFont, PDFPage, RGB } from "pdf-lib";
 import type { DailyLoanResult } from "./dailyLoanCalculator";
 import { formatDate } from "./calculator";
-
-const TEMPLATE_URL = `${import.meta.env.BASE_URL}daily-loan-template.pdf`;
+import templateUrl from "../assets/daily-loan-template.pdf?url";
 const PAGE_HEIGHT = 1008;
 
 function formatAmount(value: number): string {
@@ -33,7 +32,7 @@ function drawText(
 
 export async function createDailyLoanDetailsPdf(result: DailyLoanResult): Promise<Uint8Array> {
   const { PDFDocument, StandardFonts, rgb } = await import("pdf-lib");
-  const response = await fetch(TEMPLATE_URL);
+  const response = await fetch(templateUrl);
   if (!response.ok) throw new Error(`Could not load the loan details PDF template (${response.status}).`);
 
   const pdf = await PDFDocument.load(await response.arrayBuffer());
@@ -58,6 +57,7 @@ export async function createDailyLoanDetailsPdf(result: DailyLoanResult): Promis
   // The client name is populated in its existing form fields along with the selected summaries.
   text(result.fullName.trim(), 135, 111, 160, 10);
   text(result.fullName.trim(), 310, 458, 166, 9.5, "left", true);
+  text(result.collectorName.trim(), 382, 792, 198, 9.5);
 
   // Loan Details & Financial Summary rows.
   amount(result.principal, 111);

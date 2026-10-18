@@ -14,6 +14,7 @@ import { DailyLoanPage } from "./components/DailyLoanPage";
 import { DashboardPage } from "./components/DashboardPage";
 import { CashCountPage } from "./components/CashCountPage";
 import { CollectorsPage } from "./components/CollectorsPage";
+import { DailyCashPositionPage } from "./components/DailyCashPositionPage";
 import { AppShell } from "./components/Layout";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import {
@@ -187,6 +188,7 @@ function App() {
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/amortization" element={<AmortizationPage />} />
             <Route path="/cash-count" element={<CashCountPage />} />
+            <Route path="/daily-cash-position" element={<DailyCashPositionPage />} />
             <Route path="/collectors" element={<CollectorsPage />} />
           </Route>
         </Route>

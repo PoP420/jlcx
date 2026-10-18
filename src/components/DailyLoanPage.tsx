@@ -100,6 +100,20 @@ export function DailyLoanPage() {
                 onChange={(event) => set("fullName", event.target.value)}
               />
             </Field>
+            <Field
+              id="collectorName"
+              label="Collector Name"
+              hint="Name of the collector handling this loan"
+            >
+              <input
+                id="collectorName"
+                className="input"
+                type="text"
+                placeholder="e.g. Maria Santos"
+                value={input.collectorName}
+                onChange={(event) => set("collectorName", event.target.value)}
+              />
+            </Field>
           </div>
         </section>
 
@@ -326,6 +340,7 @@ export function DailyLoanPage() {
           </div>
           <dl className="result-dl">
             <ResultRow label="Borrower" value={result.fullName} />
+            <ResultRow label="Collector" value={result.collectorName} />
             <ResultRow label="Principal" value={formatCurrency(result.principal)} />
             <ResultRow label="Term" value={`${result.termMonths} month(s)`} />
             <ResultRow label="Interest (10%/mo)" value={formatCurrency(result.interest)} />

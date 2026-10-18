@@ -69,6 +69,7 @@ export function CashCountPage() {
 
   const [payer, setPayer] = useState("");
   const [collectionAmount, setCollectionAmount] = useState("");
+  const [collectionReference, setCollectionReference] = useState("");
   const [collectionNote, setCollectionNote] = useState("");
   const [collectionSaving, setCollectionSaving] = useState(false);
 
@@ -138,10 +139,22 @@ export function CashCountPage() {
     const collected = entries
       .filter((entry) => entry.type === "collection")
       .reduce((sum, entry) => sum + entry.amount, 0);
+    const expenses = entries
+      .filter((entry) => entry.type === "expense")
+      .reduce((sum, entry) => sum + entry.amount, 0);
+    const transfersIn = entries
+      .filter((entry) => entry.type === "transfer_in")
+      .reduce((sum, entry) => sum + entry.amount, 0);
+    const transfersOut = entries
+      .filter((entry) => entry.type === "transfer_out")
+      .reduce((sum, entry) => sum + entry.amount, 0);
     return {
       released,
       collected,
-      cashOnHand: openingTotal - released + collected,
+      expenses,
+      transfersIn,
+      transfersOut,
+      cashOnHand: openingTotal - released - expenses - transfersOut + collected + transfersIn,
     };
   }, [entries, openingTotal]);
 
@@ -190,9 +203,9 @@ export function CashCountPage() {
         const previous =
           rows.length > 0 ? rows[rows.length - 1].balance : startBalance;
         const balance =
-          entry.type === "release"
-            ? previous - entry.amount
-            : previous + entry.amount;
+          entry.type === "collection" || entry.type === "transfer_in"
+            ? previous + entry.amount
+            : previous - entry.amount;
         return [...rows, { entry, balance }];
       },
       [],
@@ -300,12 +313,14 @@ export function CashCountPage() {
       payer.trim(),
       collectionNote.trim(),
       date,
+      collectionReference.trim(),
     );
     if (result.error) {
       setError(result.error);
     } else {
       setPayer("");
       setCollectionAmount("");
+      setCollectionReference("");
       setCollectionNote("");
       setRevision((current) => current + 1);
     }
@@ -375,6 +390,11 @@ export function CashCountPage() {
           <span className="card-hint">
             Payments received by all collectors
           </span>
+        </div>
+        <div className="card card-warning">
+          <span className="card-label">Expenses</span>
+          <span className="card-value">{formatCurrency(-totals.expenses)}</span>
+          <span className="card-hint">Cash operating expenses</span>
         </div>
         <div className="card card-primary">
           <span className="card-label">Cash on Hand</span>
@@ -610,6 +630,20 @@ export function CashCountPage() {
             </div>
 
             <div className="field">
+              <label className="field-label" htmlFor="collection-reference">
+                Receipt / OR number <span className="field-hint">(optional)</span>
+              </label>
+              <input
+                id="collection-reference"
+                className="input"
+                type="text"
+                value={collectionReference}
+                onChange={(event) => setCollectionReference(event.target.value)}
+                disabled={isAll}
+              />
+            </div>
+
+            <div className="field">
               <label className="field-label" htmlFor="collection-note">
                 Note <span className="field-hint">(optional)</span>
               </label>
@@ -673,12 +707,12 @@ export function CashCountPage() {
                     <td>
                       <span
                         className={`tag ${
-                          entry.type === "release"
-                            ? "tag-warning"
-                            : "tag-active"
+                          entry.type === "collection"
+                            ? "tag-active"
+                            : "tag-warning"
                         }`}
                       >
-                        {entry.type === "release" ? "Release" : "Collection"}
+                        {entry.type === "release" ? "Release" : entry.type === "expense" ? "Expense" : entry.type === "transfer_in" ? "Transfer in" : entry.type === "transfer_out" ? "Transfer out" : "Collection"}
                       </span>
                     </td>
                     <td>{entry.note ?? "—"}</td>
@@ -689,12 +723,12 @@ export function CashCountPage() {
                     </td>
                     <td
                       className={`col-amount mono ${
-                        entry.type === "release"
+                        entry.type !== "collection" && entry.type !== "transfer_in"
                           ? "amount-negative"
                           : "amount-positive"
                       }`}
                     >
-                      {entry.type === "release" ? "−" : "+"}
+                      {entry.type === "collection" || entry.type === "transfer_in" ? "+" : "−"}
                       {formatCurrency(entry.amount)}
                     </td>
                     <td className="col-amount mono">

@@ -8,6 +8,7 @@ export const OVERDUE_PENALTY_RATE = 0.03;
 
 export interface DailyLoanInput {
   fullName: string;
+  collectorName: string;
   principal: number;
   termMonths: number;
   releaseDate: string;
@@ -19,6 +20,7 @@ export interface DailyLoanInput {
 
 export interface DailyLoanResult {
   fullName: string;
+  collectorName: string;
   principal: number;
   termMonths: number;
   interest: number;
@@ -38,6 +40,7 @@ export interface DailyLoanResult {
 
 export const DEFAULT_DAILY_LOAN_INPUT: DailyLoanInput = {
   fullName: "",
+  collectorName: "",
   principal: 10_000,
   termMonths: 2,
   releaseDate: todayIso(),
@@ -101,6 +104,7 @@ export function calculateDailyLoan(input: DailyLoanInput): DailyLoanResult {
 
   return {
     fullName: input.fullName,
+    collectorName: input.collectorName,
     principal,
     termMonths,
     interest,

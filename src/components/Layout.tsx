@@ -8,6 +8,7 @@ const sidebarItems = [
   { to: "/amortization", label: "Amortization", icon: "◐" },
   { to: "/daily-loan", label: "Daily Loan", icon: "◑" },
   { to: "/cash-count", label: "Cash Count", icon: "₱" },
+  { to: "/daily-cash-position", label: "Daily Cash Position", icon: "▤" },
   { to: "/collectors", label: "Collectors", icon: "◉" },
 ] as const;
 
