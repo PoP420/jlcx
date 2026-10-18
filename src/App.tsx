@@ -10,6 +10,7 @@ import { PrintButton } from "./components/PrintButton";
 import { PrintStatement } from "./components/PrintStatement";
 import { NavBar } from "./components/NavBar";
 import { LoginPage } from "./components/LoginPage";
+import { SignupPage } from "./components/SignupPage";
 import { DailyLoanPage } from "./components/DailyLoanPage";
 import { DashboardPage } from "./components/DashboardPage";
 import { CashCountPage } from "./components/CashCountPage";
@@ -181,6 +182,7 @@ function App() {
     <AuthProvider>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route element={<Shell />}>
           <Route path="/" element={<AmortizationPage />} />
           <Route path="/daily-loan" element={<DailyLoanPage />} />

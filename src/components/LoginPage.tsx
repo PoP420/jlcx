@@ -92,7 +92,8 @@ export function LoginPage() {
         </form>
 
         <p className="auth-footer">
-          Need an account? Contact your Jamo Lending Corp administrator.
+          Need an account? Contact your Jamo Lending Corp administrator to
+          receive an invitation.
         </p>
       </div>
     </div>

@@ -9,6 +9,7 @@ interface AuthContextValue {
   loading: boolean;
   signIn: (email: string, password: string) => Promise<{ error: Error | null }>;
   signOut: () => Promise<{ error: Error | null }>;
+  acceptInvite: (email: string, inviteHash: string, password: string) => Promise<{ error: Error | null }>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -56,9 +57,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return { error: error ? new Error(error.message) : null };
   }, []);
 
+  const acceptInvite = useCallback(
+    async (email: string, inviteHash: string, password: string) => {
+      const { error: verifyError } = await supabase.auth.verifyOtp({
+        email,
+        token: inviteHash,
+        type: "invite",
+      });
+      if (verifyError) {
+        return { error: new Error(verifyError.message) };
+      }
+
+      const { error: updateError } = await supabase.auth.updateUser({
+        password,
+      });
+      return { error: updateError ? new Error(updateError.message) : null };
+    },
+    [],
+  );
+
   const value = useMemo<AuthContextValue>(
-    () => ({ user, session, loading, signIn, signOut }),
-    [user, session, loading, signIn, signOut],
+    () => ({ user, session, loading, signIn, signOut, acceptInvite }),
+    [user, session, loading, signIn, signOut, acceptInvite],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
