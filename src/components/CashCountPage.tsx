@@ -62,6 +62,8 @@ export function CashCountPage() {
   const [openingSaving, setOpeningSaving] = useState(false);
 
   const [borrower, setBorrower] = useState("");
+  const [borrowerPhone, setBorrowerPhone] = useState("");
+  const [borrowerSmsConsent, setBorrowerSmsConsent] = useState(false);
   const [reference, setReference] = useState("");
   const [releaseAmount, setReleaseAmount] = useState("");
   const [releaseNote, setReleaseNote] = useState("");
@@ -276,6 +278,8 @@ export function CashCountPage() {
     const result = await recordCashRelease(
       collectorId,
       borrower.trim(),
+      borrowerPhone.trim(),
+      borrowerSmsConsent,
       amount,
       reference.trim(),
       releaseNote.trim(),
@@ -286,6 +290,8 @@ export function CashCountPage() {
       setError(result.error);
     } else {
       setBorrower("");
+      setBorrowerPhone("");
+      setBorrowerSmsConsent(false);
       setReference("");
       setReleaseAmount("");
       setReleaseNote("");
@@ -506,6 +512,22 @@ export function CashCountPage() {
             </div>
 
             <div className="field">
+              <label className="field-label" htmlFor="release-borrower-phone">
+                Borrower mobile <span className="field-hint">(optional, for SMS reminders)</span>
+              </label>
+              <input
+                id="release-borrower-phone"
+                className="input"
+                type="tel"
+                inputMode="tel"
+                placeholder="09XX XXX XXXX"
+                value={borrowerPhone}
+                onChange={(event) => setBorrowerPhone(event.target.value)}
+                disabled={isAll}
+              />
+            </div>
+
+            <div className="field">
               <label className="field-label" htmlFor="release-reference">
                 Loan reference <span className="field-hint">(optional)</span>
               </label>
@@ -519,6 +541,11 @@ export function CashCountPage() {
                 disabled={isAll}
               />
             </div>
+
+            <label className="sms-active-toggle">
+              <input type="checkbox" checked={borrowerSmsConsent} onChange={(event) => setBorrowerSmsConsent(event.target.checked)} disabled={isAll} />
+              Borrower agreed to receive SMS reminders
+            </label>
 
             <div className="field">
               <label className="field-label" htmlFor="release-amount">

@@ -11,11 +11,15 @@ import { PrintStatement } from "./components/PrintStatement";
 import { NavBar } from "./components/NavBar";
 import { LoginPage } from "./components/LoginPage";
 import { SignupPage } from "./components/SignupPage";
+import { AuthCallback } from "./components/AuthCallback";
 import { DailyLoanPage } from "./components/DailyLoanPage";
 import { DashboardPage } from "./components/DashboardPage";
 import { CashCountPage } from "./components/CashCountPage";
 import { CollectorsPage } from "./components/CollectorsPage";
 import { DailyCashPositionPage } from "./components/DailyCashPositionPage";
+import { SmsBlastPage } from "./components/SmsBlastPage";
+import { SmsLogPage } from "./components/SmsLogPage";
+import { SmsTemplatesPage } from "./components/SmsTemplatesPage";
 import { AppShell } from "./components/Layout";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import {
@@ -180,6 +184,7 @@ function ProtectedRoute() {
 function App() {
   return (
     <AuthProvider>
+      <AuthCallback />
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
@@ -192,6 +197,9 @@ function App() {
             <Route path="/cash-count" element={<CashCountPage />} />
             <Route path="/daily-cash-position" element={<DailyCashPositionPage />} />
             <Route path="/collectors" element={<CollectorsPage />} />
+            <Route path="/sms" element={<SmsBlastPage />} />
+            <Route path="/sms-activity" element={<SmsLogPage />} />
+            <Route path="/sms-templates" element={<SmsTemplatesPage />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />

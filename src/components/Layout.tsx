@@ -10,6 +10,8 @@ const sidebarItems = [
   { to: "/cash-count", label: "Cash Count", icon: "₱" },
   { to: "/daily-cash-position", label: "Daily Cash Position", icon: "▤" },
   { to: "/collectors", label: "Collectors", icon: "◉" },
+  { to: "/sms", label: "SMS Reminders", icon: "✉" },
+  { to: "/sms-activity", label: "SMS Activity", icon: "◷" },
 ] as const;
 
 export function AppShell() {
@@ -87,6 +89,19 @@ export function AppShell() {
               </li>
             ))}
           </ul>
+          {role === "admin" && (
+            <>
+              <p className="sidebar-section">Administration</p>
+              <ul className="sidebar-list">
+                <li className="sidebar-item">
+                  <NavLink to="/sms-templates" className={({ isActive }) => isActive ? "sidebar-link sidebar-link-active" : "sidebar-link"} onClick={() => setSidebarOpen(false)}>
+                    <span className="sidebar-icon" aria-hidden="true">✎</span>
+                    <span className="sidebar-label">SMS Templates</span>
+                  </NavLink>
+                </li>
+              </ul>
+            </>
+          )}
         </nav>
 
         <div className="sidebar-footer">

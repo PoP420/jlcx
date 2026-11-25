@@ -1,0 +1,119 @@
+﻿borrower_name,principal,status,source_loan_code,source_status,source_row,issued_on,due_on,interest_rate,contract_months,amount_paid,outstanding_balance,processing_fee,insurance_fee,notarial_fee,net_release,remarks
+"Bosmion, Jerwen",40000,active,1000090,On-Going,843,2024-10-18,2026-11-18,0.02,25,53867,6133,1200,800,400,37600,Monthly Payment
+"AlbaÃ±ez, Ernesto",100000,active,1000124,On-Going,953,2025-03-20,2026-03-20,0.05,12,93331,66669,3000,2000,1000,94000,Bad debt
+"Masil, Roberto",130000,active,1000125,On-Going,954,2025-03-20,2027-03-20,0.02,24,120255,72145,3900,2600,1300,122200,Monthly Payment
+"Casas, Marilyn",90000,active,1000126,On-Going,955,2025-03-20,2027-03-20,0.02,24,77700,55500,2700,1800,900,84600,Monthly Payment
+"Rabina, Cristine Glyn",90000,active,1000127,On-Going,956,2025-03-20,2027-03-20,0.02,24,111000,22200,2700,1800,900,84600,Monthly Payment
+"Espinosa, Richard",90000,active,1000128,On-Going,957,2025-03-20,2027-03-20,0.02,24,83250,49950,2700,1800,900,84600,Monthly Payment
+"Monleon, Ruby Agnes",45000,active,1000129,On-Going,958,2025-03-20,2027-03-20,0.02,24,38850,27750,1350,900,450,42300,Monthly Payment
+"Endar, Esterlita",80000,active,1000130,On-Going,959,2025-03-21,2027-03-21,0.02,24,70165,48943,2400,1600,800,75200,Monthly Payment
+"Casas, Riechard",90000,active,1000131,On-Going,960,2025-03-24,2027-03-24,0.02,24,83250,49950,,,,90000,Monthly Payment
+"Eyong, Monerson",90000,active,1000132,On-Going,962,2025-03-25,2027-03-25,0.02,24,125850,7350,,,,90000,Monthly Payment
+"Pontongan, Adonairan",90000,active,1000138,On-Going,970,2025-03-28,2027-03-28,0.02,24,83250,49950,,,,90000,Monthly Payment
+"Eyong, Editha",90000,active,1000145,On-Going,982,2025-04-11,2027-04-11,0.02,24,116550,16650,2700,1800,900,84600,Monthly Payment
+"Jala, Joy",164400,active,1000149,On-Going,988,2025-04-30,2026-11-30,0.03,19,168000,50180.96,4932,3288,1644,154536,Monthly Payment
+"Dompor, Merna",30000,active,1000155,On-Going,997,2025-05-13,2027-05-13,0.05,24,44000,22000,900,600,300,28200,Monthly Payment
+"Masacote, Luzviminda",30000,active,1000161,On-Going,1004,2025-05-23,2026-05-23,0.05,12,37480,11480,900,600,300,28200,Monthly Payment
+"Sixto, Myrna",40000,active,1000188,On-Going,1032,2025-06-27,2026-12-27,0.02,18,45330,9070,1200,800,400,37600,Monthly Payment
+"Biliran, Zeal",130000,active,1000199,On-Going,1039,2025-07-14,2027-07-14,0.05,24,73585,214560.04,3900,2600,1300,122200,Monthly Payment
+"Sixto, Myrna",10000,active,1000331,On-Going,1050,2025-07-29,2027-01-29,0.02,18,10584,3016,300,200,100,9400,Monthly Payment
+"Diamad, Shirley",8000,active,1000208,On-Going,1060,2025-08-08,2026-11-08,0.02,15,10049,351,240,160,80,7520,Monthly Payment
+"Pinsoy, Perlita",8000,active,1000209,On-Going,1061,2025-08-08,2026-11-08,0.02,15,10049,351,240,160,80,7520,Monthly Payment
+"Caa, Hafly",23000,active,1000212,On-Going,1066,2025-08-26,2026-11-26,0.02,15,27902,1998,690,460,230,21620,Monthly Payment
+"Rotaquio, Mercie",20000,active,1000259,On-Going,1082,2025-09-22,2026-09-22,0.05,12,23622,8725,600,400,200,18800,Monthly Payment
+"Vicada, Jeson ",100000,active,1000239,On-Going,1088,2025-09-30,2026-11-30,0.05,14,74500,98800,3000,2000,1000,94000,Monthly Payment
+"Pakiding, Neil",15000,active,1000503,On-Going,1117,2025-11-29,2026-09-29,0.05,10,7950,15045,450,300,150,14100,Monthly Payment
+"Suralta, Yvonne",12000,active,1000504,On-Going,1119,2025-12-02,2026-10-02,0.02,10,9480,5268,360,240,120,11280,Monthly Payment
+"Lagada, Bernie",30000,active,1000506,On-Going,1122,2025-12-05,2026-12-05,0.05,12,26000,23095,900,600,300,28200,Monthly Payment
+"Lagada, Bernie",34000,active,1000512,On-Going,1129,2025-12-15,2026-12-15,0.02,12,34168.8,7991.2,1020,680,340,31960,Monthly Payment
+"Gutierrez, Almamae",11000,active,1000513,On-Going,1130,2025-12-23,2026-04-23,0.05,4,4000,9959,330,220,110,10340,Bad Debt
+"Sixto, Myrna",15000,active,1000516,On-Going,1135,2026-01-06,2027-01-06,0.02,12,12400,6200,450,300,150,14100,Monthly Payment
+"Millarosa, Marianne",33000,active,1000517,On-Going,1136,2026-01-08,2027-01-08,0.05,12,27203,26125,990,660,330,31020,Monthly Payment
+"CaÃ±ada, Junric",75600,active,1000519,On-Going,1139,2026-01-13,2028-01-13,0.02,24,45851,68305,2268,1512,756,71064,Monthly Payment
+"Esma, Peter",20000,active,1000524,On-Going,1145,2026-01-23,2026-11-23,0.02,10,21900,2100,600,400,200,18800,Monthly Payment
+"Jumarito, Romel",30000,active,1000525,On-Going,1146,2026-01-23,2027-01-23,0.05,12,32240,16480,900,600,300,28200,Monthly Payment
+"Caa, Hafly",15000,active,1000526,On-Going,1147,2026-01-27,2026-11-27,0.02,10,16200,1800,450,300,150,14100,Monthly Payment
+"Delima, Petronilo",120000,active,1000533,On-Going,1156,2026-02-07,2026-07-07,0.05,5.5,50000,112840,3600,2400,1200,112800,Bad Debt
+"Angelita, Clerigo",55000,active,1000536,On-Going,1159,2026-02-12,2026-11-12,0.05,9,58383,22082,1650,1100,550,51700,Monthly Payment
+"Malto, Juanito",100000,active,1000538,On-Going,1161,2026-02-19,2027-02-19,0.02,12,82664,41336,3000,2000,1000,94000,Monthly Payment
+"Garcia, Aldrake",20000,active,1000546,On-Going,1170,2026-03-13,2026-09-13,0.05,6,19503,6497,600,400,200,18800,Monthly Payment
+"Cayog, Irene",10000,active,1000547,On-Going,1171,2026-03-13,2027-01-13,0.05,10,4500,10500,300,200,100,9400,Monthly Payment
+"Montifalcon, Maryboy",10000,active,1000551,On-Going,1175,2026-03-18,2026-09-18,0.05,6,9798,3332,300,200,100,9400,Monthly Payment
+"Balagot, Esther Racquel",140000,active,1000554,On-Going,1178,2026-03-21,2027-03-21,0.05,12,130666.2,93333.8,4200,2800,1400,131600,Monthly Payment
+"Mori, Jasmin",150000,active,1000556,On-Going,1180,2026-03-26,2027-03-26,0.02,12,70913,115087,4500,3000,1500,141000,Monthly Payment
+"Ruga, Rezzalyn",55000,active,1000559,On-Going,1184,2026-04-10,2026-11-10,0.05,7,41947,32303,1650,1100,550,51700,Monthly Payment
+"Bosmion, Jerwen",18000,active,1000561,On-Going,1186,2026-04-10,2027-04-10,0,12,8250,9750,540,360,180,16920,Monthly Payment
+"Eyong, Agustina",18000,active,1000562,On-Going,1187,2026-04-17,2027-04-17,0.05,12,11950,16850,540,360,180,16920,Monthly Payment
+"Rodeca, Jay",105000,active,1000567,On-Going,1201,2026-05-07,2026-11-07,0.05,6,110000,13068,3150,2100,1050,98700,Monthly Payment
+"Rebuta, Amelyn",25000,active,1000568,On-Going,1202,2026-05-08,2026-08-08,0.05,3,17750,11000,750,500,250,23500,Bad Debt
+"Lozada, Sheila",25000,active,,On-Going,1204,2026-05-18,2027-01-18,0.05,8,21875,13125,750,500,250,23500,Monthly Payment
+"Roque, Marissa",10000,active,,On-Going,1207,2026-05-26,2027-05-26,0.02,12,4132,8268,300,200,100,9400,Monthly
+"Damali, Patricia",10000,active,,On-Going,1222,2026-06-01,2026-11-01,0.05,5,4500,8000,300,200,100,9400,Monthly Payment
+"Umeki, Irene",60000,active,,On-Going,1223,2026-06-02,2028-06-02,0.02,24,18500,70300,1800,1200,600,56400,Monthly Payment
+"Chambers, Jocelyn",50000,active,,On-Going,1224,2026-06-03,2027-04-03,0.05,10,37800,38100,1500,1000,500,47000,Monthly Payment 
+"CaÃ±o, Jocel",9000,active,,On-Going,1226,2026-06-09,2026-12-09,0.02,6,1500,8580,270,180,90,8460,Monthly Payment
+"Ocon, Franklen",26000,active,,On-Going,1227,2026-06-10,2026-11-10,0.05,5,18375,14125,780,520,260,24440,Monthly Payment
+"Tablon, Marry Joe",12000,active,,On-Going,1228,2026-06-11,2027-06-11,0.02,12,5380,9500,360,240,120,11280,Monthly Payment
+"Dadigan, Abdulrachman",25000,active,1000537,On-Going,1229,2026-06-16,2027-06-16,0.02,12,11269,19731,750,500,250,23500,Monthly Payment
+"Neniel, Jenefer",30000,active,,On-Going,1232,2026-06-17,2026-12-17,0.05,6,16250,22750,900,600,300,28200,Monthly Payment
+"CaÃ±ada, RIcardo",30000,active,,On-Going,1233,2026-06-18,2027-02-18,0.05,8,21000,21000,900,600,300,28200,Monthly Payment
+"Awi, Rey",25000,active,,On-Going,1234,2026-06-24,2027-06-24,0.05,12,10333,29667,750,500,250,23500,Monthly Payment
+"Alvares, Noemi",74520,active,100565,On-Going,1236,2026-06-30,2027-06-30,0,12,10020,64500,2235.6,1490.4,745.2,70048.8,Restraction for closing (Commit 6k monthly)
+"Umiten, Alipio III",500000,active,,On-Going,1237,2026-06-30,2027-06-30,0.02,12,167532,464448,15000,10000,5000,470000,Monthly Payment
+"Alod, Crisanto",10000,active,,On-Going,1245,2026-07-03,2027-01-03,0.05,6,8668,4332,300,200,100,9400,Monthly Payment
+"UNABIA, ROSITA",20000,active,,On-Going,1247,2026-07-13,2027-07-13,0.05,12,7700,24300,600,400,200,18800,Monthly Payment
+"Esma, Peter",20000,active,,On-Going,1249,2026-07-16,2027-05-16,0.02,10,6900,17100,600,400,200,18800,Monthly Payment
+"Pugoy, Divina",35000,active,,On-Going,1250,2026-07-16,2027-02-16,0.05,7,23625,23625,1050,700,350,32900,Monthly Payment
+"Toleran, Roberto",55000,active,,On-Going,1251,2026-07-16,2026-12-16,0.05,5,20395,49000,1650,1100,550,51700,Monthly Payment
+"Barra, Randy",10000,active,,On-Going,1252,2026-07-17,2027-01-17,0.05,6,6501,6629,300,200,100,9400,Monthly Payment
+"Baon, Eric",20000,active,,On-Going,1254,2026-07-22,2026-11-22,0.05,4,13500,10500,600,400,200,18800,Monthly Payment
+"Alquiza, Jerymie",25000,active,,On-Going,1256,2026-07-24,2027-07-24,0.02,12,9044,21956,750,500,250,23500,Monthly Payment
+"Awe, Marifel",150000,active,1000560,On-Going,1257,2026-07-27,2026-11-27,0.05,4,93750,78750,4500,3000,1500,141000,Monthly Payment
+"Ibrahim, Norman",20000,active,,On-Going,1258,2026-07-28,2026-12-28,0.05,5,15000,10000,600,400,200,18800,Monthly Payment
+"Umiten, Alipio III",20000,active,,On-Going,1265,2026-08-05,2027-01-05,0.05,5,500,24500,600,400,200,18800,Monthly Payment
+"Masil, Diana",10000,active,,On-Going,1266,2026-08-05,2027-06-05,0.05,10,4500,10500,300,200,100,9400,Monthly Payment
+"Dapar, Paul Jason",20000,active,,On-Going,1267,2026-08-05,2027-02-05,0.05,6,13001,12999,600,400,200,18800,Monthly Payment
+"Cogolodo, Jennifer",10000,active,,On-Going,1268,2026-08-05,2027-01-05,0.05,5,2450,10050,300,200,100,9400,Monthly Payment
+"Ocon, Ireneo",10000,active,,On-Going,1270,2026-08-06,2026-12-06,0.02,4,5400,5400,300,200,100,9400,Monthly Payment
+"Apostol, Marlon",15000,active,,On-Going,1271,2026-08-10,2027-08-10,0.02,12,4650,13950,450,300,150,14100,Monthly Payment
+"Castilla, Jessa",20000,active,,On-Going,1272,2026-08-10,2027-02-10,0.05,6,10834,15166,600,400,200,18800,Monthly Payment
+"Sanchez, Lucila",20000,active,,On-Going,1273,2026-08-13,2027-02-13,0.05,6,10000,16000,600,400,200,18800,Monthly Payment
+"Sagusara, Rogelio",15000,active,,On-Going,1274,2026-08-19,2027-08-19,0.05,12,4000,20000,450,300,150,14100,Monthly Payment
+"Soco, Marlon Joy",15000,active,,On-Going,1276,2026-08-19,2027-02-19,0.02,6,7000,9800,450,300,150,14100,Monthly Payment
+"Manuel, Charlie",40000,active,,On-Going,1277,2026-08-19,2027-08-19,0.05,12,10666,53334,1200,800,400,37600,Monthly Payment
+"Familar, Ailyn",10000,active,,On-Going,1278,2026-08-20,2027-02-20,0.05,6,3250,9750,300,200,100,9400,Monthly Payment
+"Aribas, Nela",15000,active,,On-Going,1279,2026-08-20,2027-02-20,0.05,6,6500,13000,450,300,150,14100,Monthly Payment
+"Hassan, Jerry",12000,active,,On-Going,1280,2026-08-20,2027-02-20,0.05,6,5000,10756,360,240,120,11280,Monthly Payment
+"Barril, Kenny",20000,active,,On-Going,1281,2026-08-24,2027-06-24,0.05,10,3000,27000,600,400,200,18800,Monthly Payment
+"Paon, Sonny",10000,active,,On-Going,1283,2026-08-26,2026-12-26,0.05,4,,12000,300,200,100,9400,Bad Debt
+"Ceniza, Dante",30000,active,,On-Going,1284,2026-08-28,2026-11-28,0.05,3,23320,11180,900,600,300,28200,Monthly Payment
+"Sigampong, Ritchie",5500,active,,On-Going,1285,2026-08-31,2026-10-31,0.05,2,1000,5050,165,110,55,5170,Monthly Payment
+"Manliguez, Arlyn",5000,active,,On-Going,1286,2026-09-02,2026-11-02,0.02,2,1300,3900,150,100,50,4700,Monthly Payment
+"Pagaduan, Jonathan",250000,active,,On-Going,1287,2026-09-08,2026-12-08,0.02,3,88333,176667,7500,5000,2500,235000,Monthly Payment
+"Delima, Myfel",10000,active,,On-Going,1288,2026-09-15,2026-11-15,0.05,2,,11000,300,200,100,9400,Monthly Payment
+"Ebol, Corazon",40000,active,,On-Going,1289,2026-09-18,2027-09-18,0.05,12,5333,58667,1200,800,400,37600,Monthly Payment
+"Bocado, Rene",11834,active,,On-Going,1290,2026-09-15,2027-03-15,0.05,6,2500,12884.2,355.02,236.68,118.34,11123.96,Monthly Payment
+"Rocaberte, Shermae",10000,active,,On-Going,1291,2026-09-22,2027-09-22,0.02,12,1033,11367,300,200,100,9400,Monthly Payment
+"Alon, Elena",25000,active,,On-Going,1292,2026-09-22,2027-09-22,0.02,12,2583,28417,750,500,250,23500,Monthly Payment
+"Petecio, Percy",20000,active,,On-Going,1293,2026-09-22,2027-09-22,0.02,12,2067,22733,600,400,200,18800,Monthly Payment
+"Casile, Crispina",100000,active,,On-Going,1294,2026-09-25,2027-09-25,0.05,12,13333,146667,3000,2000,1000,94000,Monthly Payment
+"Rebuta, Reymark",5500,active,,On-Going,1295,2026-09-30,2026-11-30,0.05,2,,6050,165,110,55,5170,Monthly Payment
+"Dadigan, Abdulrachman",5000,active,,On-Going,1304,2026-10-05,2027-04-05,0.02,6,934,4666,150,100,50,4700,Monthly Payment
+"Gilbero, Esterlita",20000,active,,On-Going,1305,2026-10-09,2026-12-09,0.05,2,,22660,600,400,200,18800,Monthly Payment
+"Kahar, Al-Najman",253000,active,,On-Going,1306,2026-10-12,2029-10-12,0.02,36,12100,423060,7590,5060,2530,237820,Monthly Payment
+"Dico, Emiliano",10000,active,,On-Going,1307,2026-10-13,2026-12-13,0.05,2,,11000,300,200,100,9400,Monthly Payment
+"Ahit, Rustom",90000,active,,On-Going,1308,2026-10-14,2027-10-14,0.05,12,,144000,2700,1800,900,84600,Monthly Payment
+"Adto-on, Jayson",100000,active,,On-Going,1309,2026-10-16,2028-10-16,0.02,24,6000,142000,3000,2000,1000,94000,Monthly Payment
+"Bacarisas, Charlie",100000,active,,On-Going,1310,2026-10-16,2027-10-16,0.05,12,,160000,3000,2000,1000,94000,Monthly Payment
+"Pampangan, Erwin",40000,active,,On-Going,1311,2026-10-20,2028-01-20,0.02,15,,52000,1200,800,400,37600,Monthly Payment
+"Tablon, Marry Joe",12000,active,,On-Going,1312,2026-10-20,2027-10-20,0.02,12,,14880,360,240,120,11280,Monthly Payment
+"Pugado, Janet",2500,active,,On-Going,1313,2026-10-21,2026-12-21,0.05,2,,2750,75,50,25,2350,Monthly Payment
+"Estrera, Jonadelle",40000,active,,On-Going,1314,2026-10-22,2027-10-22,0.05,12,2667,61333,1200,800,400,37600,Monthly Payment
+"Rogelio, Sana",10000,active,,On-Going,1315,2026-10-28,2027-04-28,0.05,6,,13000,300,200,100,9400,Monthly Payment
+"Marcelino, Connie",25000,active,,On-Going,1316,2026-10-29,2027-02-28,0.05,4,,30000,750,500,250,23500,Monthly Payment
+"Limbaga, Jose",15000,active,,On-Going,1318,2026-11-05,2027-01-05,0.05,2,,16500,450,300,150,14100,Monthly Payment
+"Delima, Sutica",10825,active,,On-Going,1319,2026-11-06,2027-05-06,0.05,6,,14072.5,324.75,216.5,108.25,10175.5,Monthly Payment
+"Ibrahim, Rasul",15000,active,,On-Going,1320,2026-11-11,2027-01-11,0.05,2,,16500,450,300,150,14100,Monthly Payment
+"Beloy, Renje",5000,active,,On-Going,1321,2026-11-12,2027-01-12,0.05,2,,5500,150,100,50,4700,Monthly Payment
+"Landas, Renato",15000,active,,On-Going,1322,2026-11-13,2027-05-13,0.05,6,,19500,450,300,150,14100,Monthly Payment
+"Baugbog, Victor",500000,active,,On-Going,1323,2026-11-17,2026-12-17,0.05,1,,525000,15000,10000,5000,470000,Monthly Payment

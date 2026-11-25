@@ -155,6 +155,13 @@ export function DashboardPage() {
                 <span>Manage collectors who hold cash</span>
               </span>
             </Link>
+            <Link className="dashboard-action" to="/sms">
+              <span className="dashboard-action-icon" aria-hidden="true">✉</span>
+              <span className="dashboard-action-text">
+                <strong>SMS Reminders</strong>
+                <span>Preview and send borrower messages</span>
+              </span>
+            </Link>
           </div>
         </div>
 

@@ -59,6 +59,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const acceptInvite = useCallback(
     async (email: string, inviteHash: string, password: string) => {
+      // If the invite link already established a session (Supabase's implicit
+      // redirect lands here with #access_token=...&type=invite), the user is
+      // already authenticated and only needs a password set.
+      const { data } = await supabase.auth.getSession();
+      if (data?.session) {
+        const { error: updateError } = await supabase.auth.updateUser({
+          password,
+        });
+        return { error: updateError ? new Error(updateError.message) : null };
+      }
+
+      // Fallback for manually built invite links (?invite_hash=...&type=invite).
       const { error: verifyError } = await supabase.auth.verifyOtp({
         email,
         token: inviteHash,

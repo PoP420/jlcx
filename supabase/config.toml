@@ -1,0 +1,4 @@
+[functions.sms-dispatch]
+# The function validates the Supabase user JWT itself for staff requests and
+# requires SMS_CRON_SECRET for scheduled calls.
+verify_jwt = false

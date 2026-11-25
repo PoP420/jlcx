@@ -20,6 +20,7 @@ export interface Collector {
   name: string;
   phone: string | null;
   active: boolean;
+  sms_enabled: boolean;
   created_by: string;
   created_at: string;
 }
@@ -255,6 +256,7 @@ function asCollector(row: unknown): Collector {
     name: String(value.name),
     phone: value.phone == null ? null : String(value.phone),
     active: Boolean(value.active),
+    sms_enabled: Boolean(value.sms_enabled),
     created_by: String(value.created_by),
     created_at: String(value.created_at),
   };
@@ -329,7 +331,7 @@ export async function fetchMyProfile(): Promise<ServiceResult<Profile | null>> {
 export async function fetchCollectors(): Promise<ServiceResult<Collector[]>> {
   const { data, error } = await supabase
     .from("collectors")
-    .select("id, name, phone, active, created_by, created_at")
+    .select("id, name, phone, active, sms_enabled, created_by, created_at")
     .order("name", { ascending: true });
 
   if (error) return { data: null, error: error.message };
@@ -339,14 +341,15 @@ export async function fetchCollectors(): Promise<ServiceResult<Collector[]>> {
 export async function createCollector(
   name: string,
   phone: string,
+  smsEnabled = false,
 ): Promise<ServiceResult<Collector>> {
   const userId = await currentUserId();
   if (!userId) return { data: null, error: "Not signed in." };
 
   const { data, error } = await supabase
     .from("collectors")
-    .insert({ name, phone: phone.length > 0 ? phone : null, created_by: userId })
-    .select("id, name, phone, active, created_by, created_at")
+    .insert({ name, phone: phone.length > 0 ? phone : null, sms_enabled: smsEnabled, created_by: userId })
+    .select("id, name, phone, active, sms_enabled, created_by, created_at")
     .single();
 
   if (error) return { data: null, error: error.message };
@@ -483,6 +486,8 @@ export async function setCashOpening(
 export async function recordCashRelease(
   collectorId: string,
   borrowerName: string,
+  borrowerPhone: string,
+  borrowerSmsConsent: boolean,
   amount: number,
   reference: string,
   note: string,
@@ -496,6 +501,8 @@ export async function recordCashRelease(
     .from("loans")
     .insert({
       borrower_name: borrowerName,
+      borrower_phone: borrowerPhone.trim() || null,
+      borrower_sms_consent: borrowerSmsConsent,
       principal: amount,
       collector_id: collectorId,
       status: "active",

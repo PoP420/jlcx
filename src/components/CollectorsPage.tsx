@@ -13,6 +13,7 @@ export function CollectorsPage() {
   const [error, setError] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [smsEnabled, setSmsEnabled] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [revision, setRevision] = useState(0);
 
@@ -38,12 +39,13 @@ export function CollectorsPage() {
     setError(null);
     setSubmitting(true);
 
-    const result = await createCollector(name.trim(), phone.trim());
+    const result = await createCollector(name.trim(), phone.trim(), smsEnabled);
     if (result.error) {
       setError(result.error);
     } else {
       setName("");
       setPhone("");
+      setSmsEnabled(false);
       setRevision((current) => current + 1);
     }
 
@@ -95,6 +97,11 @@ export function CollectorsPage() {
               />
             </div>
 
+            <label className="sms-active-toggle">
+              <input type="checkbox" checked={smsEnabled} onChange={(event) => setSmsEnabled(event.target.checked)} />
+              Collector agreed to receive SMS follow-up alerts
+            </label>
+
             {error && (
               <div className="alert" role="alert">
                 {error}
@@ -135,7 +142,7 @@ export function CollectorsPage() {
                     </span>
                   </div>
                   <div className="collector-item-details">
-                    <span>{collector.phone ?? "No phone on file"}</span>
+                    <span>{collector.phone ?? "No phone on file"}{collector.sms_enabled ? " · SMS enabled" : ""}</span>
                     <span>
                       Added{" "}
                       {formatDate(toIsoDate(new Date(collector.created_at)))}
