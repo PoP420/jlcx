@@ -506,6 +506,7 @@ export async function recordCashRelease(
       principal: amount,
       collector_id: collectorId,
       status: "active",
+      account_type: "daily",
     })
     .select("id")
     .single();
@@ -638,7 +639,7 @@ export async function fetchDashboardStats(
   const [cashResult, loansResult, allCollectionsResult, todayCollectionsResult] =
     await Promise.all([
       fetchCashOnHand(null, occurredOn),
-      supabase.from("loans").select("principal").eq("status", "active"),
+      supabase.from("loans").select("principal").eq("status", "active").eq("account_type", "daily"),
       supabase.from("cash_ledger").select("amount").eq("type", "collection"),
       supabase
         .from("cash_ledger")
@@ -685,3 +686,6 @@ export async function fetchDashboardStats(
     error: null,
   };
 }
+
+
+

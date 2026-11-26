@@ -1,4 +1,11 @@
--- Run once in the hosted Supabase SQL editor after enabling pg_cron and pg_net.
+-- Enable the extensions first. pg_cron creates the `cron` schema used below;
+-- pg_net provides `net.http_post` for calling the Edge Function.
+create extension if not exists pg_cron with schema pg_catalog;
+create extension if not exists pg_net with schema extensions;
+
+-- If extension creation is denied here, enable pg_cron and pg_net under
+-- Dashboard > Database > Extensions, then rerun this file.
+-- Run in the hosted Supabase SQL editor after applying migration 0006.
 -- Create these Vault secrets first using your real project URL and a strong
 -- random secret that matches the SMS_CRON_SECRET Edge Function secret:
 --   select vault.create_secret('https://<project-ref>.supabase.co', 'project_url');

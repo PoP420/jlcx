@@ -20,6 +20,7 @@ import { DailyCashPositionPage } from "./components/DailyCashPositionPage";
 import { SmsBlastPage } from "./components/SmsBlastPage";
 import { SmsLogPage } from "./components/SmsLogPage";
 import { SmsTemplatesPage } from "./components/SmsTemplatesPage";
+import { JamoNhImportPage } from "./components/JamoNhImportPage";
 import { AppShell } from "./components/Layout";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import {
@@ -200,6 +201,7 @@ function App() {
             <Route path="/sms" element={<SmsBlastPage />} />
             <Route path="/sms-activity" element={<SmsLogPage />} />
             <Route path="/sms-templates" element={<SmsTemplatesPage />} />
+            <Route path="/jamo-nh-import" element={<JamoNhImportPage />} />
           </Route>
         </Route>
         <Route path="*" element={<Navigate to="/" replace />} />
@@ -209,3 +211,5 @@ function App() {
 }
 
 export default App;
+
+

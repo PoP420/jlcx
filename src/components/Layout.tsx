@@ -99,6 +99,12 @@ export function AppShell() {
                     <span className="sidebar-label">SMS Templates</span>
                   </NavLink>
                 </li>
+                <li className="sidebar-item">
+                  <NavLink to="/jamo-nh-import" className={({ isActive }) => isActive ? "sidebar-link sidebar-link-active" : "sidebar-link"} onClick={() => setSidebarOpen(false)}>
+                    <span className="sidebar-icon" aria-hidden="true">▧</span>
+                    <span className="sidebar-label">In-House Account Import</span>
+                  </NavLink>
+                </li>
               </ul>
             </>
           )}
@@ -134,3 +140,4 @@ export function AppShell() {
     </div>
   );
 }
+
