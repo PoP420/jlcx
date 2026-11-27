@@ -45,7 +45,7 @@ Deno.serve(async (request) => {
       admin.from("sms_config").select("dry_run,daily_limit,reminder_days_before,escalation_days_after").eq("id", 1).single(),
       admin.from("loans")
         .select("id,borrower_name,borrower_phone,borrower_sms_consent,borrower_sms_opted_out,outstanding_balance,principal,due_on,collector_id,status,borrower:borrowers(full_name,phone),collector:collectors(name,phone,created_by),installments:loan_installments(id,due_on,expected_principal,expected_interest,principal_paid,interest_paid,status)")
-        .in("id", loanIds),
+        .in("id", loanIds).eq("status", "active"),
     ]);
     if (templateError) throw templateError;
     if (configError) throw configError;

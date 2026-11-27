@@ -63,7 +63,6 @@ export async function fetchSmsLoans(): Promise<ServiceResult<SmsLoan[]>> {
   const { data, error } = await supabase.from("loans")
     .select("id,borrower_name,borrower_phone,borrower_sms_consent,borrower_sms_opted_out,outstanding_balance,principal,due_on,borrower:borrowers(full_name,phone),collector:collectors(name),installments:loan_installments(due_on,expected_principal,expected_interest,principal_paid,interest_paid,status)")
     .eq("status", "active")
-    .eq("account_type", "daily")
     .order("borrower_name");
   if (error) return { data: null, error: error.message };
   return {
