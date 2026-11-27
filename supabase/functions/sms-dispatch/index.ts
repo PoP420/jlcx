@@ -296,7 +296,7 @@ async function dispatch(input: DispatchInput): Promise<JsonRecord> {
       body: JSON.stringify({
         mobilenum: mobile,
         originator,
-        fullmesq: encodeURIComponent(input.message),
+        fullmesg: input.message,
         blackhole: 0,
         client_outboxnum: String(reservationRow.log_id),
         format: "json",
