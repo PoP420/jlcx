@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import { formatDate, toIsoDate } from "../lib/calculator";
 import {
   createCollector,
+  deleteCollector,
   fetchCollectors,
+  updateCollector,
   type Collector,
 } from "../lib/cashService";
 
@@ -11,17 +13,21 @@ export function CollectorsPage() {
   const [collectors, setCollectors] = useState<Collector[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [smsEnabled, setSmsEnabled] = useState(false);
+  const [active, setActive] = useState(true);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const [revision, setRevision] = useState(0);
 
   useEffect(() => {
-    let active = true;
+    let alive = true;
     (async () => {
       const result = await fetchCollectors();
-      if (!active) return;
+      if (!alive) return;
       if (result.error) {
         setError(result.error);
       } else {
@@ -30,26 +36,71 @@ export function CollectorsPage() {
       setLoading(false);
     })();
     return () => {
-      active = false;
+      alive = false;
     };
   }, [revision]);
+
+  const reset = () => {
+    setEditingId(null);
+    setName("");
+    setPhone("");
+    setSmsEnabled(false);
+    setActive(true);
+    setError(null);
+    setNotice(null);
+  };
+
+  const beginEdit = (collector: Collector) => {
+    setEditingId(collector.id);
+    setName(collector.name);
+    setPhone(collector.phone ?? "");
+    setSmsEnabled(collector.sms_enabled);
+    setActive(collector.active);
+    setError(null);
+    setNotice(null);
+  };
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
     setError(null);
+    setNotice(null);
     setSubmitting(true);
 
-    const result = await createCollector(name.trim(), phone.trim(), smsEnabled);
+    const result = editingId
+      ? await updateCollector(editingId, name.trim(), phone.trim(), smsEnabled, active)
+      : await createCollector(name.trim(), phone.trim(), smsEnabled);
+
     if (result.error) {
       setError(result.error);
     } else {
-      setName("");
-      setPhone("");
-      setSmsEnabled(false);
+      setNotice(editingId ? "Collector updated." : "Collector added.");
+      reset();
       setRevision((current) => current + 1);
     }
 
     setSubmitting(false);
+  };
+
+  const handleDelete = async (collector: Collector) => {
+    if (
+      !window.confirm(
+        `Delete ${collector.name}? This removes the collector and unassigns any linked loans and cash entries.`,
+      )
+    ) {
+      return;
+    }
+    setError(null);
+    setNotice(null);
+    setDeletingId(collector.id);
+    const result = await deleteCollector(collector.id);
+    if (result.error) {
+      setError(result.error);
+    } else {
+      setNotice(`${collector.name} deleted.`);
+      if (editingId === collector.id) reset();
+      setRevision((current) => current + 1);
+    }
+    setDeletingId(null);
   };
 
   return (
@@ -62,10 +113,21 @@ export function CollectorsPage() {
         </p>
       </header>
 
+      {error && (
+        <div className="alert" role="alert">
+          {error}
+        </div>
+      )}
+      {notice && (
+        <div className="sms-result" role="status">
+          {notice}
+        </div>
+      )}
+
       <main className="page-grid">
         <section className="panel">
           <div className="panel-header">
-            <h2>Add Collector</h2>
+            <h2>{editingId ? "Edit Collector" : "Add Collector"}</h2>
           </div>
           <form className="collector-form" onSubmit={handleSubmit}>
             <div className="field">
@@ -98,23 +160,48 @@ export function CollectorsPage() {
             </div>
 
             <label className="sms-active-toggle">
-              <input type="checkbox" checked={smsEnabled} onChange={(event) => setSmsEnabled(event.target.checked)} />
+              <input
+                type="checkbox"
+                checked={smsEnabled}
+                onChange={(event) => setSmsEnabled(event.target.checked)}
+              />
               Collector agreed to receive SMS follow-up alerts
             </label>
 
-            {error && (
-              <div className="alert" role="alert">
-                {error}
-              </div>
+            {editingId && (
+              <label className="sms-active-toggle">
+                <input
+                  type="checkbox"
+                  checked={active}
+                  onChange={(event) => setActive(event.target.checked)}
+                />
+                Active (available for cash counts and loan assignments)
+              </label>
             )}
 
-            <button
-              className="button-primary"
-              type="submit"
-              disabled={submitting || name.trim().length === 0}
-            >
-              {submitting ? "Saving..." : "Add Collector"}
-            </button>
+            <div className="sms-button-row">
+              <button
+                className="button-primary"
+                type="submit"
+                disabled={submitting || name.trim().length === 0}
+              >
+                {submitting
+                  ? "Saving..."
+                  : editingId
+                    ? "Save Changes"
+                    : "Add Collector"}
+              </button>
+              {editingId && (
+                <button
+                  className="button-secondary"
+                  type="button"
+                  onClick={reset}
+                  disabled={submitting}
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
           </form>
         </section>
 
@@ -142,18 +229,39 @@ export function CollectorsPage() {
                     </span>
                   </div>
                   <div className="collector-item-details">
-                    <span>{collector.phone ?? "No phone on file"}{collector.sms_enabled ? " · SMS enabled" : ""}</span>
+                    <span>
+                      {collector.phone ?? "No phone on file"}
+                      {collector.sms_enabled ? " · SMS enabled" : ""}
+                    </span>
                     <span>
                       Added{" "}
                       {formatDate(toIsoDate(new Date(collector.created_at)))}
                     </span>
                   </div>
-                  <Link
-                    className="button-secondary collector-item-action"
-                    to={`/cash-count?collector=${collector.id}`}
-                  >
-                    Cash Count
-                  </Link>
+                  <div className="workspace-actions">
+                    <Link
+                      className="button-secondary collector-item-action"
+                      to={`/cash-count?collector=${collector.id}`}
+                    >
+                      Cash Count
+                    </Link>
+                    <button
+                      className="button-secondary"
+                      type="button"
+                      onClick={() => beginEdit(collector)}
+                      disabled={deletingId === collector.id}
+                    >
+                      Edit
+                    </button>
+                    <button
+                      className="button-danger"
+                      type="button"
+                      onClick={() => void handleDelete(collector)}
+                      disabled={deletingId === collector.id}
+                    >
+                      {deletingId === collector.id ? "Deleting..." : "Delete"}
+                    </button>
+                  </div>
                 </li>
               ))}
               {collectors.length === 0 && (

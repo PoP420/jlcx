@@ -34,7 +34,17 @@ export interface ManagedLoan {
   processing_fee: number;
   insurance_fee: number;
   notarial_fee: number;
+  savings_fee: number;
+  apply_processing_fee: boolean;
+  apply_insurance_fee: boolean;
+  apply_notarial_fee: boolean;
+  apply_savings_fee: boolean;
   net_release: number | null;
+  rebate_amount: number;
+  previous_balance: number;
+  advance_payment: number;
+  passbook_fee: number;
+  daily_payment_amount: number | null;
   remarks: string | null;
   created_at: string;
 }
@@ -68,7 +78,17 @@ export interface LoanInput {
   processing_fee: number;
   insurance_fee: number;
   notarial_fee: number;
+  savings_fee: number;
+  apply_processing_fee: boolean;
+  apply_insurance_fee: boolean;
+  apply_notarial_fee: boolean;
+  apply_savings_fee: boolean;
   net_release: number;
+  rebate_amount: number;
+  previous_balance: number;
+  advance_payment: number;
+  passbook_fee: number;
+  daily_payment_amount: number | null;
   outstanding_balance: number;
   remarks: string;
   installments: InstallmentInput[];
@@ -135,7 +155,15 @@ export async function fetchLoans(): Promise<ServiceResult<ManagedLoan[]>> {
     amount_paid: Number((row as Record<string, unknown>).amount_paid ?? 0),
     outstanding_balance: row.outstanding_balance == null ? null : Number(row.outstanding_balance),
     processing_fee: Number(row.processing_fee ?? 0), insurance_fee: Number(row.insurance_fee ?? 0),
-    notarial_fee: Number(row.notarial_fee ?? 0), net_release: row.net_release == null ? null : Number(row.net_release),
+    notarial_fee: Number(row.notarial_fee ?? 0), savings_fee: Number(row.savings_fee ?? 0),
+    apply_processing_fee: Boolean(row.apply_processing_fee),
+    apply_insurance_fee: Boolean(row.apply_insurance_fee),
+    apply_notarial_fee: Boolean(row.apply_notarial_fee),
+    apply_savings_fee: Boolean(row.apply_savings_fee),
+    net_release: row.net_release == null ? null : Number(row.net_release),
+    rebate_amount: Number(row.rebate_amount ?? 0), previous_balance: Number(row.previous_balance ?? 0),
+    advance_payment: Number(row.advance_payment ?? 0), passbook_fee: Number(row.passbook_fee ?? 0),
+    daily_payment_amount: row.daily_payment_amount == null ? null : Number(row.daily_payment_amount),
     interest_rate: row.interest_rate == null ? null : Number(row.interest_rate),
   })), error: null };
 }
@@ -150,7 +178,7 @@ export async function fetchLoanHistory(): Promise<ServiceResult<RepaymentSummary
 
 export async function createManagedLoan(input: LoanInput): Promise<ServiceResult<string>> {
   const payload = loanPayload(input);
-  const { data, error } = await supabase.rpc("create_managed_loan", {
+  const { data, error } = await supabase.rpc("create_managed_loan_with_savings", {
     p_loan: payload,
     p_installments: input.installments,
     p_disburse: input.disburse,
@@ -167,13 +195,21 @@ function loanPayload(input: LoanInput): Record<string, unknown> {
     issued_on: input.issued_on, due_on: input.due_on, interest_rate: input.interest_rate,
     contract_months: input.contract_months, processing_fee: input.processing_fee,
     insurance_fee: input.insurance_fee, notarial_fee: input.notarial_fee,
+    savings_fee: input.savings_fee,
+    apply_processing_fee: input.apply_processing_fee,
+    apply_insurance_fee: input.apply_insurance_fee,
+    apply_notarial_fee: input.apply_notarial_fee,
+    apply_savings_fee: input.apply_savings_fee,
     net_release: input.net_release, outstanding_balance: input.outstanding_balance,
+    rebate_amount: input.rebate_amount, previous_balance: input.previous_balance,
+    advance_payment: input.advance_payment, passbook_fee: input.passbook_fee,
+    daily_payment_amount: input.daily_payment_amount,
     remarks: input.remarks || null,
   };
 }
 
 export async function editManagedLoan(id: string, input: LoanInput): Promise<ServiceResult<true>> {
-  const { error } = await supabase.rpc("update_managed_loan", {
+  const { error } = await supabase.rpc("update_managed_loan_with_savings", {
     p_loan_id: id, p_loan: loanPayload(input), p_installments: input.installments,
   });
   if (error) return resultError(error.message);

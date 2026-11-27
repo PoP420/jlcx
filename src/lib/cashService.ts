@@ -356,6 +356,41 @@ export async function createCollector(
   return { data: asCollector(data), error: null };
 }
 
+export async function updateCollector(
+  id: string,
+  name: string,
+  phone: string,
+  smsEnabled: boolean,
+  active: boolean,
+): Promise<ServiceResult<Collector>> {
+  const userId = await currentUserId();
+  if (!userId) return { data: null, error: "Not signed in." };
+
+  const { data, error } = await supabase
+    .from("collectors")
+    .update({
+      name,
+      phone: phone.length > 0 ? phone : null,
+      sms_enabled: smsEnabled,
+      active,
+    })
+    .eq("id", id)
+    .select("id, name, phone, active, sms_enabled, created_by, created_at")
+    .single();
+
+  if (error) return { data: null, error: error.message };
+  return { data: asCollector(data), error: null };
+}
+
+export async function deleteCollector(id: string): Promise<ServiceResult<null>> {
+  const userId = await currentUserId();
+  if (!userId) return { data: null, error: "Not signed in." };
+
+  const { error } = await supabase.from("collectors").delete().eq("id", id);
+  if (error) return { data: null, error: error.message };
+  return { data: null, error: null };
+}
+
 /** Sum of starting cash for the given collector (or every collector) on a date. */
 export async function fetchOpeningTotal(
   collectorId: string | null,
