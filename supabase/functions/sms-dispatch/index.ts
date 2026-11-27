@@ -290,34 +290,74 @@ async function dispatch(input: DispatchInput): Promise<JsonRecord> {
     const apiKey = Deno.env.get("MAXXTEXT_APPKEY");
     const originator = Deno.env.get("MAXXTEXT_ORIGINATOR");
     if (!apiKey || !originator) throw new Error("SMS provider is not configured.");
+    const encodedMessage = encodeURIComponent(input.message);
+    const providerPayload = {
+      mobilenum: mobile,
+      originator,
+      fullmesg: encodedMessage,
+      format: "json",
+    };
+    console.info("MAXXtext request prepared", {
+      endpoint: Deno.env.get("MAXXTEXT_API_URL") ?? "https://svr36.synermaxx.asia/api/sendmsg.php",
+      method: "POST",
+      headerNames: ["Content-Type", "appkey"],
+      bodyFields: Object.keys(providerPayload),
+      fullmesgEncoding: "URL-encoded",
+      fullmesgLength: encodedMessage.length,
+      mobileCountryCode: mobile.startsWith("63"),
+    });
     const response = await fetch(Deno.env.get("MAXXTEXT_API_URL") ?? "https://svr36.synermaxx.asia/api/sendmsg.php", {
       method: "POST",
       headers: { "Content-Type": "application/json", appkey: apiKey },
-      body: JSON.stringify({
-        mobilenum: mobile,
-        originator,
-        fullmesg: input.message,
-        blackhole: 0,
-        client_outboxnum: String(reservationRow.log_id),
-        format: "json",
-      }),
+      body: JSON.stringify(providerPayload),
       signal: AbortSignal.timeout(15000),
     });
-    const provider = await response.json() as JsonRecord;
-    const accepted = response.ok && Number(provider.code) === 200 && provider.status === "ACK";
+    const responseText = await response.text();
+    let provider: JsonRecord;
+    try {
+      provider = JSON.parse(responseText) as JsonRecord;
+    } catch {
+      console.error("MAXXtext returned a non-JSON response", {
+        httpStatus: response.status,
+        contentType: response.headers.get("content-type"),
+        responseLength: responseText.length,
+      });
+      throw new Error(`MAXXtext returned a non-JSON response (HTTP ${response.status}).`);
+    }
+    const numericCode = provider.code == null ? Number.NaN : Number(provider.code);
+    const providerCode = Number.isFinite(numericCode) ? numericCode : null;
+    const providerStatus = typeof provider.status === "string" ? provider.status : null;
+    const providerDescription = typeof provider.desc === "string" ? provider.desc : null;
+    console.info("MAXXtext response received", {
+      httpStatus: response.status,
+      providerCode,
+      providerStatus,
+      providerDescription,
+      responseFields: Object.keys(provider),
+    });
+    const accepted = response.ok && providerCode === 200 && providerStatus === "ACK";
     const status = accepted ? "sent" : "failed";
-    const errorMessage = accepted ? null : String(provider.desc ?? `MAXXtext returned ${provider.status ?? response.status}.`);
+    const errorMessage = accepted ? null : providerDescription ?? `MAXXtext returned ${providerStatus ?? response.status}.`;
     const { error: updateError } = await admin.from("sms_send_log").update({
       status,
       provider_ref: accepted && provider.transid != null ? String(provider.transid) : null,
-      provider_code: Number.isFinite(Number(provider.code)) ? Number(provider.code) : response.status,
+      provider_code: providerCode ?? response.status,
       error_message: errorMessage,
       sent_at: accepted ? new Date().toISOString() : null,
     }).eq("id", reservationRow.log_id);
     if (updateError) throw updateError;
-    return { loanId: input.loanId, status, providerRef: accepted ? provider.transid : undefined, error: errorMessage };
+    return {
+      loanId: input.loanId,
+      status,
+      providerRef: accepted ? provider.transid : undefined,
+      providerCode: providerCode ?? response.status,
+      providerStatus: providerStatus ?? undefined,
+      providerDescription: providerDescription ?? undefined,
+      error: errorMessage ?? undefined,
+    };
   } catch (error) {
     const message = error instanceof Error ? error.message : "Provider request failed.";
+    console.error("MAXXtext request failed", { message });
     await admin.from("sms_send_log").update({ status: "failed", error_message: message.slice(0, 300) })
       .eq("id", reservationRow.log_id);
     return { loanId: input.loanId, status: "failed", error: message };

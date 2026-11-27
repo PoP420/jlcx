@@ -60,9 +60,7 @@ appkey: <MAXXTEXT_APPKEY>
 {
   "mobilenum": "639171234567",
   "originator": "JAMOLENDING",
-  "fullmesg": "Hello Juan, your payment is due soon.",
-  "blackhole": 1,
-  "client_outboxnum": "<sms-log-uuid>",
+  "fullmesg": "Hello%20Juan%2C%20your%20payment%20is%20due%20soon.",
   "format": "json"
 }
 ```
@@ -73,7 +71,7 @@ The valid sample is JSON with `code: 200`, `status: "ACK"`, `transid`, `txtparts
 
 An ACK means the API accepted the send request; the document does not define a delivery callback or guarantee delivery. `dlr_flag` in the sample response is not a documented callback contract. Keep `delivered` as unavailable until Synermaxx supplies and verifies a DLR endpoint and payload specification.
 
-The supplied sample uses the `fullmesg` JSON property with ordinary message text. Do not URL-encode the message or use the misspelled `fullmesq` property; MAXXtext returns `Invalid Body Content` for the invalid body shape. The document does not specify throughput/rate limits, message length/encoding rules, retry semantics, timeout guidance, credit balance APIs, or a DLR webhook. Confirm these with Synermaxx before production. Avoid automatic retries after ambiguous timeouts until duplicate-send behavior and provider idempotency are understood.
+The supplied sample marks `fullmesg` as URL-encoded and uses that exact JSON property. Do not use the misspelled `fullmesq` property. The integration sends only the four fields shown in the sample; add optional fields such as `blackhole` or `client_outboxnum` only after Synermaxx confirms they are supported. The document does not specify throughput/rate limits, message length/encoding rules, retry semantics, timeout guidance, credit balance APIs, or a DLR webhook. Confirm these with Synermaxx before production. Avoid automatic retries after ambiguous timeouts until duplicate-send behavior and provider idempotency are understood.
 
 ### 2.3 Credential handling
 

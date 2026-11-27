@@ -97,7 +97,12 @@ export function SmsBlastPage() {
         {results.filter((result) => result.status === "dry_run").length > 0
           ? `Dry-run complete: ${results.filter((result) => result.status === "dry_run").length} logged, no SMS sent.`
           : `Completed: ${results.filter((result) => result.status === "sent").length} accepted, ${results.filter((result) => result.status === "failed").length} failed, ${results.filter((result) => result.status === "duplicate").length} duplicates skipped.`}
-        <ul>{results.filter((result) => result.error).map((result) => <li key={result.loanId}>{result.error}</li>)}</ul>
+        <ul>{results.map((result) => <li key={result.loanId}>
+          Loan {result.loanId}: {result.status}
+          {result.providerCode != null ? ` · MAXXtext code ${result.providerCode}` : ""}
+          {result.providerStatus ? ` · ${result.providerStatus}` : ""}
+          {result.providerDescription ? ` · ${result.providerDescription}` : result.error ? ` · ${result.error}` : ""}
+        </li>)}</ul>
       </div>}
 
       <main className="sms-layout">

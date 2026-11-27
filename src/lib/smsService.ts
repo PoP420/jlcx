@@ -51,6 +51,9 @@ export interface SmsDispatchResult {
   loanId: string;
   status: SmsStatus | "duplicate";
   providerRef?: string;
+  providerCode?: number;
+  providerStatus?: string;
+  providerDescription?: string;
   error?: string;
 }
 
