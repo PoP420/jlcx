@@ -21,6 +21,7 @@ import { SmsBlastPage } from "./components/SmsBlastPage";
 import { SmsLogPage } from "./components/SmsLogPage";
 import { SmsTemplatesPage } from "./components/SmsTemplatesPage";
 import { JamoNhImportPage } from "./components/JamoNhImportPage";
+import { BorrowersPage, LoansPage } from "./components/BorrowersLoansPages";
 import { AppShell } from "./components/Layout";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import {
@@ -198,6 +199,11 @@ function App() {
             <Route path="/cash-count" element={<CashCountPage />} />
             <Route path="/daily-cash-position" element={<DailyCashPositionPage />} />
             <Route path="/collectors" element={<CollectorsPage />} />
+            <Route path="/borrowers" element={<BorrowersPage />} />
+            <Route path="/borrowers/:id" element={<BorrowersPage />} />
+            <Route path="/loans" element={<LoansPage />} />
+            <Route path="/loans/new" element={<LoansPage />} />
+            <Route path="/loans/:id" element={<LoansPage />} />
             <Route path="/sms" element={<SmsBlastPage />} />
             <Route path="/sms-activity" element={<SmsLogPage />} />
             <Route path="/sms-templates" element={<SmsTemplatesPage />} />

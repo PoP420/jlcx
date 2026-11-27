@@ -10,6 +10,8 @@ const sidebarItems = [
   { to: "/cash-count", label: "Cash Count", icon: "₱" },
   { to: "/daily-cash-position", label: "Daily Cash Position", icon: "▤" },
   { to: "/collectors", label: "Collectors", icon: "◉" },
+  { to: "/borrowers", label: "Borrowers", icon: "♧" },
+  { to: "/loans", label: "Loans", icon: "₱" },
   { to: "/sms", label: "SMS Reminders", icon: "✉" },
   { to: "/sms-activity", label: "SMS Activity", icon: "◷" },
 ] as const;
