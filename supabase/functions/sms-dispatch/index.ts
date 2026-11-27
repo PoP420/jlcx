@@ -290,11 +290,10 @@ async function dispatch(input: DispatchInput): Promise<JsonRecord> {
     const apiKey = Deno.env.get("MAXXTEXT_APPKEY");
     const originator = Deno.env.get("MAXXTEXT_ORIGINATOR");
     if (!apiKey || !originator) throw new Error("SMS provider is not configured.");
-    const encodedMessage = encodeURIComponent(input.message);
     const providerPayload = {
       mobilenum: mobile,
       originator,
-      fullmesg: encodedMessage,
+      fullmesg: input.message,
       format: "json",
     };
     console.info("MAXXtext request prepared", {
@@ -302,8 +301,8 @@ async function dispatch(input: DispatchInput): Promise<JsonRecord> {
       method: "POST",
       headerNames: ["Content-Type", "appkey"],
       bodyFields: Object.keys(providerPayload),
-      fullmesgEncoding: "URL-encoded",
-      fullmesgLength: encodedMessage.length,
+      fullmesgEncoding: "plain text (matching sample cURL)",
+      fullmesgLength: input.message.length,
       mobileCountryCode: mobile.startsWith("63"),
     });
     const response = await fetch(Deno.env.get("MAXXTEXT_API_URL") ?? "https://svr36.synermaxx.asia/api/sendmsg.php", {
